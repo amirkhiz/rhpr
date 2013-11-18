@@ -1,0 +1,39 @@
+        <div id="footer">
+			<div class="socialBtns">
+				<a href="#" class="sIcons iconTwitter"></a>
+				<a href="#" class="sIcons iconLinkedin"></a>
+				<a href="#" class="sIcons iconFacebook"></a>
+			</div>
+			<div class="footerCats">
+				<h5>{translate(#Categories#)}:</h5>
+				{foreach:blocksFooterCats,key,valueObj}
+                   {valueObj.content:h}
+                {end:}
+			</div>
+			<div class="footerMenu">
+				<h5>{translate(#Menu#)}:</h5>
+				{foreach:blocksFooterMenu,key,valueObj}
+                   {valueObj.content:h}
+                {end:}
+			</div>
+			<div class="clearfix"><!-- Clear And Fix --></div>
+			<p flexy:if="showExecutionTimes">
+                {translate(#Execution Time#)} = {getExecutionTime()} {translate(#ms#)}
+            </p>
+        </div><!-- end footer -->
+
+    </div><!-- end wrapper-outer -->
+
+    {if:conf[debug][infoBlock]}
+    <flexy:include src="debug.html" />
+    {end:}
+
+    <div flexy:if="conf[site][broadcastMessage]" id="broadcastMessage">
+        {conf[site][broadcastMessage]}
+        <a href="#" title="{tr(#close#)}">X</a>
+    </div>
+	
+	<script src="{webRoot}/slider/js/jquery.thumbnailScroller.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<div>
+	<form method="post" action="{makeUrl(#insert#,#poll#,#poll#)}" flexy:ignore>
+		{foreach:aPoll,key,value}
+		<input type="hidden" name="frmPollID" value="{key}"/>
+		<div class="pollQuestion">
+			<h6>{value[title]}</h6>
+		</div>
+		<div class="pollAnswers">
+			<ul>
+				{foreach:value[opts],k,v}
+				<li>
+					<input type="radio" name="frmPollAnswer" value="{k}" /> <span>{v}</span>
+				</li>
+				{end:}
+			</ul>
+		</div>
+		{end:}
+		<div class="pollSubmit">
+			<input type="submit" name="submitted" value="{translate(#Answer#)} >"/>
+		</div>
+	</form>
+</div>

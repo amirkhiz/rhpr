@@ -1,0 +1,76 @@
+<div class="panel panel-info" style="margin: 10px;">
+	<div class="topbtns">
+		<a type="button" href="{makeUrl(#list#,#adminpoll#,#poll#)}" class="btn btn-primary">
+			<span class="glyphicon glyphicon-chevron-up"></span> {translate(#Up#)}
+		</a>
+	</div>
+	{msgGet()}
+	<form name="frmPollMgr" method="post" flexy:ignore id="frmPollMgr">
+	    <table class="table table-bordered">
+	    	<tr>
+	    		{if:pager}<flexy:include src="admin_pager_table.html" />{end:}	
+	    	</tr>
+	    	<thead>
+		        <tr>
+					<th>{translate(#Answer Title#)}</th>
+					<th>{translate(#Count#)}</th>
+					<th width="3%">
+						<a href="{makeUrl(#results#,#adminpoll#,#poll#,##,#frmSortBy|usr.username||frmSortOrder|sortOrder||frmPollID|pollId#)}" 
+							title="{translate(#Sort by#)} {translate(#Username#)}">
+							{translate(#Username#)}
+						</a>
+						{if:sort_usr_id}
+						<img src="{webRoot}/themes/{theme}/images/sort_{sortOrder}.gif" alt="" />
+						{end:}
+					</th>
+					<th>
+						<a href="{makeUrl(#results#,#adminpoll#,#poll#,##,#frmSortBy|usr.first_name||frmSortOrder|sortOrder||frmPollID|pollId#)}" 
+							title="{translate(#Sort by#)} {translate(#First Name#)}">
+							{translate(#First Name#)}
+						</a>
+					</th>
+					<th>
+						<a href="{makeUrl(#results#,#adminpoll#,#poll#,##,#frmSortBy|usr.last_name||frmSortOrder|sortOrder||frmPollID|pollId#)}" 
+							title="{translate(#Sort by#)} {translate(#Last Name#)}">
+							{translate(#Last Name#)}
+						</a>
+					</th>
+					<th>{translate(#Date Created#)}</th>
+		            <th>
+		            	<a href="{makeUrl(#results#,#adminpoll#,#poll#,##,#frmSortBy|paCount||frmSortOrder|sortOrder||frmPollID|pollId#)}" 
+							title="{translate(#Sort by#)} {translate(#Percentage#)}">
+							{translate(#Percentage#)}
+						</a>
+					</th>
+		        </tr>
+			</thead>
+			<tbody>
+		        <tr flexy:foreach="aPagedData[data],key,aValue">
+					<td nowrap>{aValue[pqTitle]}</td>
+					<td nowrap>{aValue[paCount]}</td>
+					<td nowrap>{aValue[usrName]}</td>
+					<td nowrap>{aValue[usrFName]}</td>
+					<td nowrap>{aValue[usrLName]}</td>
+					<td nowrap>{formatDate(aValue[date_created])}</td>
+		            <td width="20%" nowrap>
+		            	<div class="progress" style="margin-bottom: 0;">
+							{if:isEqual(aValue[percent],0)}
+							<div>
+						    	<span class="sr-only zeroRes">{aValue[pqTitle]} 0% {translate(#Voted#)}</span>
+							{else:}
+							<div class="progress-bar" role="progressbar" aria-valuenow="{aValue[percent]}" aria-valuemin="0" aria-valuemax="100" style="width: {aValue[percent]}%;">
+								<span class="sr-only">{aValue[pqTitle]} {aValue[percent]}% {translate(#Voted#)}</span>
+							{end:}
+							</div>
+						</div>
+		            </td>
+		        </tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="5">{if:pager}<flexy:include src="admin_pager_table.html" />{end:}</td>
+				</tr>
+			</tfoot>
+	    </table>
+	</form>
+</div>

@@ -1,0 +1,38 @@
+<link href="{webRoot}/slider/css/jquery.thumbnailScroller.css" rel="stylesheet" />
+<div id="tS3" class="jThumbnailScroller offersBlock">
+	<h3>{translate(#Offers#)}</h3>
+	<div class="jTscrollerContainer">
+		<div class="jTscroller offerContent">
+			{foreach:aAds,key,value}
+			<a href="{value.url}" target="_blank">
+				<img src="{webRoot}/images/ads/small/small_{value.image}" alt="{value.title}" width="158">
+			</a>
+			{end:}
+		</div>
+	</div>
+	<a href="#" class="jTscrollerPrevButton"></a>
+	<a href="#" class="jTscrollerNextButton"></a>
+</div>
+
+<script>
+jQuery.noConflict(); 
+(function($){
+	window.onload=function(){ 
+		$("#tS3").thumbnailScroller({ 
+			scrollerType:"hoverPrecise", 
+			scrollerOrientation:"vertical", 
+			scrollSpeed:2, 
+			scrollEasing:"easeOutCirc", 
+			scrollEasingAmount:800, 
+			acceleration:4, 
+			scrollSpeed:800, 
+			noScrollCenterSpace:10, 
+			autoScrolling:1, 
+			autoScrollingSpeed:2000, 
+			autoScrollingEasing:"easeInOutQuad", 
+			autoScrollingDelay:500 
+		});
+	}
+})(jQuery);
+</script>
+<!-- thumbnailScroller script -->

@@ -1,0 +1,16 @@
+		<div class="topBanner">
+			<div class="logo">
+				<img src="{webRoot}/themes/{theme}/images/bg/logo.png" alt="ilgalilar rehberi"/>
+			</div>
+			<div class="socialBtns">
+				<a href="#" class="sIcons iconTwitter"></a>
+				<a href="#" class="sIcons iconLinkedin"></a>
+				<a href="#" class="sIcons iconFacebook"></a>
+			</div>
+			<div class="mainNav">
+				{foreach:blocksMainNav,key,valueObj}
+                   {valueObj.content:h}
+                {end:}
+			</div>
+		<div class="clearfix"><!-- Clear And Fix --></div>
+		</div>
