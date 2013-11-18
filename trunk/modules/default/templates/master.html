@@ -1,0 +1,53 @@
+<flexy:include src="header.html" />
+<flexy:include src="banner.html" />
+<flexy:include src="search.html" />
+
+        <div id="wrapper-inner">
+            <div id="content" class="clearfix">
+
+				<div id="leftFixBlocks">
+					<div id="leftMenu">
+	                    <flexy:include src="blocksLeftMenu.html" />
+	                </div><!-- end slider -->
+					
+					<div id="leftAds">
+	                    <flexy:include src="blocksLeftAds.html" />
+	                </div><!-- end leftAds -->
+					
+					<div id="local">
+	                    <flexy:include src="blocksLeft.html" />
+	                </div><!-- end local -->
+					
+				</div>
+				
+				<div id="topSlider">
+				    <flexy:include src="blocksTopSlider.html" />
+				</div><!-- end topSlider -->
+
+                <div id="main">
+                    {outputBody()}
+                </div><!-- end main -->
+
+				<div id="rightBlocks">
+					<div id="offerBlock">
+                        <flexy:include src="blocksOffers.html" />
+	                </div><!-- end offerBlock -->
+					
+	                <div id="sub">
+	                    <div class="inner">
+	                        <flexy:include src="blocksRight.html" />
+	                    </div>
+	                </div><!-- end sub -->
+				</div>
+
+            </div><!-- end content -->
+        </div><!-- end wrapper-inner -->
+<div id="footerAds" class="clearfix">
+	<div id="footerFix">
+		<flexy:include src="blocksFooterAds.html" />
+	</div>
+	<div class="footerSlider">
+		<flexy:include src="blocksFooterSlider.html" />
+	</div>
+</div>
+<flexy:include src="footer.html" />

@@ -1,0 +1,27 @@
+<?php
+$aBlocksNames = array(
+    'Right'=> 'Right',
+    'Left' => 'Left',
+    'Top' => 'Top',
+    'Bottom' => 'Bottom',
+    'BodyTop' => 'BodyTop',
+    'AdminCategory' => 'AdminCategory',
+    'AdminNav' => 'AdminNav',
+    'AdminBreadcrumbs' => 'AdminBreadcrumbs',
+    'MainNav' => 'MainNav',
+    'MainBreadcrumb' => 'MainBreadcrumb',
+    'FirstPage' => 'FirstPage',
+	'Slider' => 'Slider',
+	'LeftMenu' => 'LeftMenu',
+	'FooterMenu' => 'FooterMenu',
+	'FooterCats' => 'FooterCats',
+	'TopSlider' => 'TopSlider',
+	'LeftAds' => 'LeftAds',
+	'FooterSlider' => 'FooterSlider',
+	'FooterAds' => 'FooterAds',
+	'VideoAds' => 'VideoAds',
+	'Offers' => 'Offers',
+	'KurumsalLogin' => 'KurumsalLogin',
+	'BreyselLogin' => 'BreyselLogin',
+    );
+?>

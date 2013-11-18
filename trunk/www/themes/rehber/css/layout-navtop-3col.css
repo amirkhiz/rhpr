@@ -1,0 +1,34 @@
+
+/**
+ * - navigation bar at the top
+ * - 3 columns
+ *
+ * @package    themes
+ * @subpackage default2
+ * @author     Dmitri Lakachauskis <lakiboy83@gmail.com>
+ */
+
+div#content {
+    position: relative;
+    width: 980px;
+	margin: auto;
+}
+div#main {
+    float: left;
+    width: 575px;
+    display: inline;
+}
+div#rightBlocks { /* actual width: 216 = 200 + 4 (right margin) + 1 * 2 (borders) + 5 * 2 (paddings) */
+    float: right;
+    width: 192px;
+    display: inline;
+}
+div#local {
+    float: left;
+    width: 190px;
+    display: inline;
+}
+div#leftFixBlocks {
+	float: left;
+}
+<?php include('nav-vertical.css'); ?>

@@ -1,0 +1,26 @@
+        <div class="header">
+			<div class="container">
+	        	<div class="row">
+	        		<div class="col-lg-3">
+	        			<div class="logo">
+	        				<div class="logo-image">
+	        					<a href="{webRoot}">
+	        						<i class="icon-desktop blue"></i>
+	        					</a>
+	        				</div>
+							<div class="logo-text">
+								<h1>{conf[site][name]}</h1>
+							</div>
+							<div class="clearfix"></div>
+	        			</div>
+	        		</div>
+					<div class="col-lg-9">
+	        			<div id="nav-main">
+			            	{foreach:blocksMainNav,key,valueObj}
+			                   {valueObj.content:h}
+			                {end:}
+						</div>
+	        		</div>
+	        	</div>
+	        </div><!-- end header -->
+		</div>

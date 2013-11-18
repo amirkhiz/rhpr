@@ -1,0 +1,9 @@
+{foreach:aAds,key,value}
+<div class="videoAdsBlock">
+	<a href="{value.url}">
+		<img src="{webRoot}/images/ads/{value.image}"/>
+	</a>
+	<h5>{value.title}</h5>
+	<span>{value.description}</span>
+</div>
+{end:}

@@ -1,0 +1,20 @@
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<h3 class="panel-title">{translate(pageTitle)}</h3>
+	</div>
+	
+	{msgGet()}
+	
+	{foreach:aPollRes,key,value}
+	<div class="progress">
+		{if:isEqual(value.percent,0)}
+		<div>
+	    	<span class="sr-only zeroRes">{value.pqTitle} 0% {translate(#Voted#)}</span>
+		{else:}
+		<div class="progress-bar" role="progressbar" aria-valuenow="{value.percent}" aria-valuemin="0" aria-valuemax="100" style="width: {value.percent}%;">
+			<span class="sr-only">{value.pqTitle} {value.percent}% {translate(#Voted#)}</span>
+		{end:}
+		</div>
+	</div>
+	{end:}
+</div>

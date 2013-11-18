@@ -1,0 +1,86 @@
+<div class="panel panel-info" style="margin: 10px;">
+  <div class="panel-heading">
+    <h3 class="panel-title">{translate(pageTitle)}</h3>
+  </div>
+<form method="post" flexy:ignore class="form-horizontal" id="form-group">
+	<div class="topbtns">
+		<button type="submit" class="btn btn-primary" name="submitted"><span class="glyphicon glyphicon-ok"></span> {translate(#Save#)}</button>
+	    <button class="btn btn-info" type="button" name="cancel" onClick="document.location.href='{makeUrl(#list#,#adminpoll#,#poll#):h}'"><span class="glyphicon glyphicon-remove"></span> {translate(#Cancel#)}</button>
+	</div>
+  {msgGet()}
+	<input type="hidden" name="action" value="{action}" />
+	<input type="hidden" name="poll_id" value="{poll.poll_id}" />
+		{if:error[question]}
+	    <div class="form-group has-error">
+	      <label class="col-lg-2 control-label">{translate(#Question#,#ucfirst#)}: </label>
+		  <span class="label label-danger">{translate(error[question])}</span>
+		{else:}
+		<div class="form-group">
+	      <label class="col-lg-2 control-label">{translate(#Question#,#ucfirst#)}: </label>
+		{end:}
+		  <div class="col-lg-10">
+	      	<input type="text" class="form-control" id="inputError" name="poll[title]" value="{poll.title}" placeholder="{translate(#Question#,#ucfirst#)}">
+		  </div>
+	    </div>
+		
+		<div class="tab-pane" id="options">
+
+		    <!-- The container for the list of example images -->
+		    <div id="links">
+		    	<input type="hidden" name="pollDeletedOpt" id="pollDeletedOpt" value=""/>
+		    	{foreach:aPollOpts,key,value}
+				<div class="col-lg-12 center">
+			    	<label class="col-lg-2 control-label">{translate(#Option#,#ucfirst#)}: </label>
+					<div class="col-lg-5">
+		      			<input type="text" class="form-control" name="pollOptExist[key]" value="{value}" disabled="disabled" placeholder="{translate(#Option#,#ucfirst#)}" />
+					</div>
+		            <span class="glyphicon glyphicon-remove pollOptRemove" optId="{key}"></span>
+				</div>
+				{end:}
+		    </div>
+			
+			<div class="clearfix"><!-- Clear and Fix --></div>
+		
+			<div class="form-group">
+				<div class="col-lg-3">
+					<button type="button" id="addOpt" class="btn btn-primary">
+						<span class="glyphicon glyphicon-plus"></span> {translate(#Add Option#)}
+					</button>
+				</div>
+			</div>
+			
+			<div id="optDiv">
+				<div id="optHtml" class="form-group">
+					<label class="col-lg-2 control-label">{translate(#Option#,#ucfirst#)}: </label>
+					<div class="col-lg-9">
+		      			<input type="text" class="form-control" name="pollOpt[]" value="{poll.option}" placeholder="{translate(#Option#,#ucfirst#)}" />
+					</div>
+				</div>
+			</div>
+		
+		</div>
+</form>
+</div>
+
+<script>
+$(document).ready(function() {
+	
+	$(document).on("click", ".pollOptRemove", function(){
+		$("#pollDeletedOpt").val($("#pollDeletedOpt").val() + "," + $(this).attr('optId'));
+		$(this).parent().fadeOut(300,function(){$(this).remove();});
+	});
+	
+	$("#addOpt").click(function(){
+		var optTag = '<div class="form-group">';
+		optTag += $("#optHtml").html();
+		optTag += '<div class="col-lg-1"><a type="button" class="btn btn-danger removeOpt"><span class="glyphicon glyphicon-remove"></span></a></div></div>';
+		optTag = $(optTag).hide().fadeIn(1000);
+		$("#optDiv").append(optTag);
+	});
+	
+	$(document).on("click", ".removeOpt", function(){
+		$(this).parent().parent().fadeOut(300,function(){$(this).remove();});
+	});
+
+});
+</script>

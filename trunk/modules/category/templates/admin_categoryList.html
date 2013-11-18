@@ -1,0 +1,34 @@
+<div class="panel panel-info" style="margin: 10px;">
+  <div class="panel-heading">
+    <h3 class="panel-title">{translate(#Category list#)}</h3>
+  </div>
+  <div class="topbtns">
+	  <a type="button" href="{makeUrl(#add#,#admincategory#,#category#)}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> {translate(#New Category#)}</a>
+	  <a type="button" href="{makeUrl(#reorder#,#admincategory#,#category#)}" class="btn btn-info"><span class="glyphicon glyphicon-sort"></span> {translate(#Order#)}</a>
+  </div>
+		{msgGet()}
+		<form name="frmCategoryMgr" method="post" flexy:ignore id="frmCategoryMgr">
+		    <input type="hidden" name="action" value="delete" />
+		    <table class="table table-bordered selectable">
+		    	<thead>
+			        <tr>
+			            <th width="3%">
+	                        <span class="tipOwner">
+	                            <input type="checkbox" name="checkAll" id="checkAll" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="" data-original-title="{translate(#Be Careful!#)}" onClick="javascript:applyToAllCheckboxes('frmCategoryMgr', 'frmDelete[]', this.checked)" />
+	                        </span>
+	                    </th>
+						<th width="10">{translate(#ID#)}</th>
+						<th>{translate(#Title#)}</th>
+						<th>{translate(#Created date#)}</th>
+						<th width="20">{translate(#Status#)}</th>
+			            <th width="20">{translate(#Action#)}</th>
+			        </tr>
+				</thead>
+				<tbody>
+			        {catTree:h}
+				</tbody>
+		    </table>
+						
+			<button type="submit" class="btn btn-danger" name="Delete" onclick="return confirmSubmit('category', 'frmCategoryMgr')" /><span class="glyphicon glyphicon-trash"></span> {translate(#delete selected#)} </button>
+		</form>
+</div>

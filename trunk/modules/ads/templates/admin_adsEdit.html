@@ -1,0 +1,83 @@
+<script>
+	$(function(){
+		$( "#startDate" ).datepicker();
+		$( "#endDate" ).datepicker();
+	});
+</script>
+
+<div class="panel panel-info" style="margin: 10px;">
+
+	{msgGet()}
+	
+	<form method="post" flexy:ignore class="form-horizontal" id="form-group" enctype="multipart/form-data">
+		
+		<div class="topbtns">
+			<button type="submit" class="btn btn-primary" name="submitted"><span class="glyphicon glyphicon-ok"></span> {translate(#Save#)}</button>
+		    <button class="btn btn-info" type="button" name="cancel" onClick="document.location.href='{makeUrl(#list#,#adminads#,#ads#):h}'"><span class="glyphicon glyphicon-remove"></span> {translate(#Cancel#)}</button>
+		</div>
+		
+		<input type="hidden" name="action" value="{action}" />
+		<input type="hidden" name="ads_id" value="{ads.ads_id}" />
+		
+		<div class="form-group">
+			<label class="col-lg-2 control-label">{translate(#Title#,#ucfirst#)}: </label>
+			<div class="col-lg-10">
+				<input type="text" class="form-control" id="inputError" name="ads[title]" value="{ads.title}" placeholder="{translate(#Title#,#ucfirst#)}">
+			</div>
+	    </div>
+		
+		<div class="form-group">
+			<label class="col-lg-2 control-label">{translate(#Description#,#ucfirst#)}: </label>
+			<div class="col-lg-10">
+				<textarea class="form-control" name="ads[description]" placeholder="{translate(#Description#,#ucfirst#)}">{ads.description}</textarea>
+			</div>
+	    </div>
+		
+		<div class="form-group">
+			<label class="col-lg-2 control-label">{translate(#Username#,#ucfirst#)}: </label>
+			<div class="col-lg-10">
+				<select name="ads[usr_id]" class="form-control">
+                    {generateSelect(aUsers,ads.usr_id):h} 
+                </select>
+			</div>
+    	</div>
+		
+		<div class="form-group">
+			<label class="col-lg-2 control-label">{translate(#Start Date#,#ucfirst#)}: </label>
+			<div class="col-lg-10">
+				<input type="text" class="form-control" id="startDate" name="ads[start_date]" value="{ads.start_date}" placeholder="{translate(#Start Date#,#ucfirst#)}">
+			</div>
+	    </div>
+		
+		<div class="form-group">
+			<label class="col-lg-2 control-label">{translate(#End Date#,#ucfirst#)}: </label>
+			<div class="col-lg-10">
+				<input type="text" class="form-control" id="endDate" name="ads[end_date]" value="{ads.end_date}" placeholder="{translate(#End Date#,#ucfirst#)}">
+			</div>
+	    </div>
+		
+		<div class="form-group">
+			<label class="col-lg-2 control-label">{translate(#Link URL#,#ucfirst#)}: </label>
+			<div class="col-lg-10">
+				<input type="text" class="form-control" id="inputError" name="ads[url]" value="{ads.url}" placeholder="{translate(#Link URL#,#ucfirst#)}">
+			</div>
+	    </div>
+		
+		<div class="form-group">
+			<label class="col-lg-2 control-label">{translate(#Image#,#ucfirst#)}: </label>
+			<div class="col-lg-10">
+      			<input type="file" class="form-control" id="inputError" name="aImage" value="{ads.image}" placeholder="{translate(#Image#,#ucfirst#)}" />
+			</div>
+    	</div>
+		
+		<div class="form-group">
+			<label class="col-lg-2 control-label">{translate(#Position#,#ucfirst#)}: </label>
+			<div class="col-lg-10">
+				<select name="ads[block_id]" class="form-control">
+                    {generateSelect(aBlocks,ads.block_id):h} 
+                </select>
+			</div>
+    	</div>
+		
+	</form>
+</div>
