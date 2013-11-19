@@ -854,6 +854,7 @@ div.close span {
 .errorContainer .errorHeader {
     padding-left: 30px;
     background-image: url('<?php echo $baseUrl ?>/images/22/dialog_error.gif');
+    background-repeat: no-repeat;
     text-transform: uppercase ;
     font-weight: bold;
     letter-spacing: 0.3em;

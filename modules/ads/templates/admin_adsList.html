@@ -34,7 +34,11 @@
 					<td nowrap>{aValue[username]}</td>
 					<td nowrap>{formatDate(aValue[start_date])}</td>
 					<td nowrap>{formatDate(aValue[end_date])}</td>
-					<td nowrap>{aValue[image]}</td>
+					<td nowrap>
+						<a href="{webRoot}/images/ads/{aValue[image]}">
+							<img src="{webRoot}/images/ads/small/small_{aValue[image]}" width="50"/>
+						</a>
+					</td>
 					<td nowrap>{aValue[block]}</td>
 		            <td width="10%" nowrap>
 		            <a href="{makeUrl(#edit#,#adminads#,#ads#,aPagedData[data],#frmAdsID|ads_id#,key)}" />
@@ -45,7 +49,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="5">{if:pager}<flexy:include src="admin_pager_table.html" />{end:}</td>
+					<td colspan="8">{if:pager}<flexy:include src="admin_pager_table.html" />{end:}</td>
 				</tr>
 			</tfoot>
 	    </table>

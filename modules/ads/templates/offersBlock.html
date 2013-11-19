@@ -1,19 +1,20 @@
 <link href="{webRoot}/slider/css/jquery.thumbnailScroller.css" rel="stylesheet" />
-<div id="tS3" class="jThumbnailScroller offersBlock">
+<div class="offersBlock">
 	<h3>{translate(#Offers#)}</h3>
-	<div class="jTscrollerContainer">
-		<div class="jTscroller offerContent">
-			{foreach:aAds,key,value}
-			<a href="{value.url}" target="_blank">
-				<img src="{webRoot}/images/ads/small/small_{value.image}" alt="{value.title}" width="158">
-			</a>
-			{end:}
+	<div id="tS3" class="jThumbnailScroller">
+		<div class="jTscrollerContainer">
+			<div class="jTscroller offerContent">
+				{foreach:aAds,key,value}
+				<a href="{value.url}" target="_blank">
+					<img src="{webRoot}/images/ads/small/small_{value.image}" alt="{value.title}" width="158">
+				</a>
+				{end:}
+			</div>
 		</div>
+		<a href="#" class="jTscrollerPrevButton"></a>
+		<a href="#" class="jTscrollerNextButton"></a>
 	</div>
-	<a href="#" class="jTscrollerPrevButton"></a>
-	<a href="#" class="jTscrollerNextButton"></a>
 </div>
-
 <script>
 jQuery.noConflict(); 
 (function($){
