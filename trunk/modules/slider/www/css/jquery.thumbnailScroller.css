@@ -24,7 +24,7 @@ scrollers styling
 /* a vertical scroller */
 .jThumbnailScroller#tS3{height:400px;}
 .jThumbnailScroller#tS3 .jTscrollerContainer{position:relative;}
-.jThumbnailScroller#tS3 .jTscroller{height:auto; margin-bottom:40px;}
+.jThumbnailScroller#tS3 .jTscroller{height:auto;}
 .jThumbnailScroller#tS3 .jTscroller a{display:block; overflow:hidden; opacity:0.7; margin:auto; background:none; float:none;}
 .jThumbnailScroller#tS3 .jTscroller a:hover{opacity:1;}
 .jThumbnailScroller#tS3 .jTscroller a:first-child{}
