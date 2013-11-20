@@ -13,21 +13,30 @@ class DataObjects_Usr extends DB_DataObject
     public $usr_id;                          // int(11)  not_null primary_key
     public $organisation_id;                 // int(11)  
     public $role_id;                         // int(11)  not_null
+    public $category_id;                     // int(11)  not_null
+    public $village_id;                      // int(11)  not_null
+    public $city_id;                         // int(11)  not_null
+    public $country_id;                      // int(11)  not_null
+    public $name;                            // string(128)  not_null
     public $username;                        // string(64)  
     public $passwd;                          // string(32)  
     public $first_name;                      // string(128)  
     public $last_name;                       // string(128)  
-    public $telephone;                       // string(16)  
+    public $contact_person_1;                // string(255)  not_null
+    public $contact_person_2;                // string(255)  not_null
+    public $telephone_1;                     // string(16)  
+    public $telephone_2;                     // string(16)  not_null
+    public $fax;                             // string(16)  not_null
     public $mobile;                          // string(16)  
+    public $site_name;                       // string(255)  not_null
+    public $facebook;                        // string(128)  not_null
+    public $twitter;                         // string(128)  not_null
     public $email;                           // string(128)  
+    public $email_2;                         // string(128)  not_null
+    public $keywords;                        // blob(65535)  not_null blob
     public $logo;                            // string(255)  not_null
     public $image;                           // string(255)  not_null
-    public $addr_1;                          // string(128)  
-    public $addr_2;                          // string(128)  
-    public $addr_3;                          // string(128)  
-    public $city;                            // string(64)  
-    public $region;                          // string(32)  
-    public $country;                         // string(2)  
+    public $addr;                            // string(128)  
     public $post_code;                       // string(16)  
     public $history;                         // blob(65535)  not_null blob
     public $sex;                             // int(4)  not_null

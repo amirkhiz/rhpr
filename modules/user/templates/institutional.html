@@ -1,0 +1,305 @@
+<div id="ajaxMessage" class="message">{msgGet():h}</div>
+<div id="content-header" class="registerHead">
+	<h4>{translate(pageTitle)}</h4>
+</div>
+<div class="registerForm">
+	<form id="form-group" method="post" action="" flexy:ignore>
+	    <fieldset class="hide">
+	        <input type="hidden" name="action"value="insert" />
+	        {if:redir}
+	        <input type="hidden" name="redir" value="{redir}" />
+	        {end:}
+	    </fieldset>
+	
+		<div class="form-group">
+			<label class="col-lg-5" for="user_logo">{translate(#Logo#)}</label>
+			<label class="col-lg-1" for="user_logo">:</label>
+            <input id="user_logo" class="text col-lg-3" type="file"
+                   name="fLogo" value="{user.logo}" />
+        </div>
+	    <div class="form-group">
+	        <label class="col-lg-5" for="user_name">{translate(#Company Name#)}</label>
+			<label class="col-lg-1" for="user_name">:</label>
+            <input id="user_name" class="validate[required] text" type="text"
+                   name="user[name]" value="{user.name}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_category-id">{translate(#Category#)}</label>
+			<label class="col-lg-1" for="user_category-id">:</label>
+			<select id="user_category-id" class="validate[required]" name="user[category_id]">
+				{generateSelect(aCats,user.category_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_contact-person-1">{translate(#Contact Person#)}</label>
+			<label class="col-lg-1" for="user_contact-person-1">:</label>
+            <input id="user_contact-person-1" class="text" type="text"
+                   name="user[contact_person_1]" value="{user.contact_person_1}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_contact-person-2">{translate(#Contact Person 2#)}</label>
+			<label class="col-lg-1" for="user_contact-person-2">:</label>
+            <input id="user_contact-person-2" class="text" type="text"
+                   name="user[contact_person_2]" value="{user.contact_person_2}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_addr">{translate(#Address#)}</label>
+			<label class="col-lg-1" for="user_addr">:</label>
+            <input id="user_addr" class="validate[required] text" type="text"
+                   name="user[addr]" value="{user.addr}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_village-id">{translate(#Village#)}</label>
+			<label class="col-lg-1" for="user_village-id">:</label>
+			<select id="user_village-id" class="validate[required]" name="user[village_id]">
+				{generateSelect(aVills,user.village_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_city-id">{translate(#City#)}</label>
+			<label class="col-lg-1" for="user_city-id">:</label>
+			<select id="user_city-id" class="validate[required]" name="user[city_id]">
+				{generateSelect(aCity,user.city_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_country-id">{translate(#Country#)}</label>
+			<label class="col-lg-1" for="user_country-id">:</label>
+			<select id="user_country-id" class="validate[required]" name="user[country_id]">
+				{generateSelect(aCountry,user.country_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_telephone-1">{translate(#Telephone#)}</label>
+			<label class="col-lg-1" for="user_telephone-1">:</label>
+            <input id="user_telephone-1" class="validate[required,minSize[11]] text" type="text"
+                   name="user[telephone_1]" value="{user.telephone_1}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_telephone-2">{translate(#Telephone 2#)}</label>
+			<label class="col-lg-1" for="user_telephone-2">:</label>
+            <input id="user_telephone-2" class="validate[minSize[11]] text" type="text"
+                   name="user[telephone_2]" value="{user.telephone_2}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_fax">{translate(#Fax#)}</label>
+			<label class="col-lg-1" for="user_fax">:</label>
+            <input id="user_fax" class="validate[minSize[11]] text" type="text"
+                   name="user[fax]" value="{user.fax}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_mobile">{translate(#Mobile#)}</label>
+			<label class="col-lg-1" for="user_mobile">:</label>
+            <input id="user_mobile" class="validate[required,minSize[11]] text" type="text"
+                   name="user[mobile]" value="{user.mobile}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_site-name">{translate(#Web Site#)}</label>
+			<label class="col-lg-1" for="user_site-name">:</label>
+            <input id="user_site-name" class="validate[custom[url]] text" type="text"
+                   name="user[site_name]" value="{user.site_name}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_facebook">{translate(#Facebook#)}</label>
+			<label class="col-lg-1" for="user_facebook">:</label>
+            <input id="user_facebook" class="text" type="text"
+                   name="user[facebook]" value="{user.facebook}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_twitter">{translate(#Twitter#)}</label>
+			<label class="col-lg-1" for="user_twitter">:</label>
+            <input id="user_twitter" class="text" type="text"
+                   name="user[twitter]" value="{user.twitter}" />
+	    </div>
+	    <div class="form-group">
+	        <label class="col-lg-5" for="user_email">{translate(#Email#)}</label>
+			<label class="col-lg-1" for="user_email">:</label>
+            <input id="user_email" class="validate[required,custom[email]] text" type="text"
+                   name="user[email]" value="{user.email}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_email-2">{translate(#Email 2#)}</label>
+			<label class="col-lg-1" for="user_email-2">:</label>
+            <input id="user_email-2" class="validate[custom[email]] text" type="text"
+                   name="user[email_2]" value="{user.email_2}" />
+	    </div>
+	    <div class="form-group">
+	        <label class="col-lg-5" for="user_keywords">{translate(#Keywords#)}</label>
+			<label class="col-lg-1" for="user_keywords">:</label>
+            <textarea id="user_keywords" class="text"
+                   name="user[keywords]">{user.keywords}</textarea>
+			<p class="help-block">{translate(#Example keywords seprated with comma(,)#)}.</p>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="user_history">{translate(#Introduction#)}</label>
+			<label class="col-lg-1" for="user_history">:</label>
+            <textarea id="user_history" class="text"
+                   name="user[history]">{user.history}</textarea>
+	    </div>
+		<div class="form-group">
+			<label class="col-lg-5" for="user_image">{translate(#Image#)}</label>
+			<label class="col-lg-1" for="user_image">:</label>
+            <div>
+                <input id="user_image" class="text col-lg-3" type="file"
+                       name="fImage" value="{user.image}" />
+            </div>
+        </div>
+		<div class="form-group">
+			<label class="col-lg-5" for="user_branch">{translate(#Number of Branchs#)}</label>
+			<label class="col-lg-1" for="user_branch">:</label>
+            <div>
+                <input id="user_branch" class="validate[custom[integer],maxSize[2]] text" type="text"
+                       name="user[branch]" value="{user.branch}" />
+            </div>
+        </div>
+		
+		<div id="tabs" style="display: none;">
+			<ul>
+			</ul>
+		</div>
+	
+	    <div class="form-group">
+	        <input class="registerBtn" type="submit" name="submitted"
+	               value="{translate(#Register#)}"/>
+	    </div>
+	</form>
+</div>
+<div id="branchData" style="display: none;">
+	<div class="form-group">
+        <label class="col-lg-5" for="branch_name">{translate(#Company Name#)}</label>
+		<label class="col-lg-1" for="branch_name">:</label>
+        <input id="branch_name" class="validate[required] text" type="text"
+               name="branch[][name]"/>
+    </div>
+	<div class="form-group">
+	        <label class="col-lg-5" for="branch_contact-person-1">{translate(#Contact Person#)}</label>
+			<label class="col-lg-1" for="branch_contact-person-1">:</label>
+            <input id="branch_contact-person-1" class="text" type="text"
+                   name="branch[][contact_person_1]"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_contact-person-2">{translate(#Contact Person 2#)}</label>
+			<label class="col-lg-1" for="branch_contact-person-2">:</label>
+            <input id="branch_contact-person-2" class="text" type="text"
+                   name="branch[][contact_person_2]"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_addr">{translate(#Address#)}</label>
+			<label class="col-lg-1" for="branch_addr">:</label>
+            <input id="branch_addr" class="validate[required] text" type="text"
+                   name="branch[][addr]"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_village-id">{translate(#Village#)}</label>
+			<label class="col-lg-1" for="branch_village-id">:</label>
+			<select id="branch_village-id" class="validate[required]" name="branch[][village_id]">
+				{generateSelect(aVills,branch.village_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_city-id">{translate(#City#)}</label>
+			<label class="col-lg-1" for="branch_city-id">:</label>
+			<select id="branch_city-id" class="validate[required]" name="branch[][city_id]">
+				{generateSelect(aCity,branch.city_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_country-id">{translate(#Country#)}</label>
+			<label class="col-lg-1" for="branch_country-id">:</label>
+			<select id="branch_country-id" class="validate[required]" name="branch[][country_id]">
+				{generateSelect(aCountry,branch.country_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_telephone-1">{translate(#Telephone#)}</label>
+			<label class="col-lg-1" for="branch_telephone-1">:</label>
+            <input id="branch_telephone-1" class="validate[required,minSize[11]] text" type="text"
+                   name="branch[][telephone_1]"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_telephone-2">{translate(#Telephone 2#)}</label>
+			<label class="col-lg-1" for="branch_telephone-2">:</label>
+            <input id="branch_telephone-2" class="validate[minSize[11]] text" type="text"
+                   name="branch[][telephone_2]"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_fax">{translate(#Fax#)}</label>
+			<label class="col-lg-1" for="branch_fax">:</label>
+            <input id="branch_fax" class="validate[minSize[11]] text" type="text"
+                   name="branch[][fax]"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_mobile">{translate(#Mobile#)}</label>
+			<label class="col-lg-1" for="branch_mobile">:</label>
+            <input id="branch_mobile" class="validate[required,minSize[11]] text" type="text"
+                   name="branch[][mobile]"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_history">{translate(#Introduction#)}</label>
+			<label class="col-lg-1" for="branch_history">:</label>
+            <textarea id="branch_history" class="text" name="branch[][history]"></textarea>
+	    </div>
+		<div class="form-group">
+			<label class="col-lg-5" for="branch_image">{translate(#Image#)}</label>
+			<label class="col-lg-1" for="branch_image">:</label>
+            <div>
+                <input id="branch_image" class="text col-lg-3" type="file"
+                       name="fBranchImage[]"/>
+            </div>
+        </div>
+</div>
+<script>
+(function($){
+	$(document).ready(function() {
+		
+		var tabTitle = $( "#tab_title" ),
+			tabContent = $( "#tab_content" ),
+			tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",
+			tabCounter = 1;
+			
+		var tabs = $( "#tabs" ).tabs();
+			
+		$("#user_branch").blur(function(){
+			var branchCount = parseInt($(this).val());
+			
+			if (branchCount <= 10)
+			{
+				
+				for(i = 1; i <= branchCount; i++)
+				{
+					console.log('test OK');
+					addTab();
+					$("#tabs").fadeIn(500);
+				} 
+			}
+		});
+		
+		// actual addTab function: adds new tab using the input from the form above
+	    function addTab() {
+			var label = "Branch " + tabCounter,
+				id = "tabs-" + tabCounter,
+				li = $( tabTemplate.replace( /#\{href\}/g, "#" + id ).replace( /#\{label\}/g, label ) ),
+				tabContentHtml = $("#branchData").html();
+			
+			tabs.find( ".ui-tabs-nav" ).append( li );
+			tabs.append( "<div id='" + id + "'>" + tabContentHtml + "</div>" );
+			tabs.tabs( "refresh" );
+			tabCounter++;
+	    }
+		
+		// close icon: removing the tab on click
+		tabs.delegate( "span.ui-icon-close", "click", function() {
+			var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+			tabCounter--;
+			if (tabCounter == 1){
+				$("#tabs").fadeOut(500);
+			}
+			$( "#" + panelId ).remove();
+			tabs.tabs( "refresh" );
+			console.log(tabCounter);
+		});
+		
+	});
+})(jQuery);
+
+</script>
