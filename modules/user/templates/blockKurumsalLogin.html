@@ -13,13 +13,13 @@
         </ol>
     </fieldset>
     <p>
-        <input class="btn" type="submit" name="submitted"
+        <input class="btn loginBtn" type="submit" name="submitted"
                value="{translate(#login#)}" />
     </p>
-    <p flexy:if="conf[RegisterMgr][enabled]">
-        <a href="{makeUrl(##,#register#,#user#)}">{translate(#Not Registered#)}</a>
-    </p>
     <p>
-        <a href="{makeUrl(##,#password#,#user#)}">{translate(#Forgot Password#)}</a>
+        <a class="forgetPassword" href="{makeUrl(##,#password#,#user#)}">{translate(#Forgot Password#)}</a>
     </p>
+	<div class="registerBtn" flexy:if="conf[RegisterMgr][enabled]">
+        <a href="{makeUrl(##,#register#,#user#)}">{translate(#Institutional Register#)}</a>
+    </div>
 </form>

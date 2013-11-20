@@ -3,7 +3,7 @@
 	<div id="ajaxMessage" class="message">{msgGet():h}</div>
 </div>
 
-<form id="frmUser" method="post" action="" flexy:ignore>
+<form id="frmUser" method="post" action="" flexy:ignore enctype="multipart/form-data">
     <fieldset class="hide">
         <input id="usernameWrongFormatMsg" type="hidden"
                name="usernameWrongFormatMsg"
@@ -89,16 +89,6 @@
                 </div>
             </li>
             {end:}
-			{if:isAdmin()} 
-			<li> 
-				<label for="user_role-id">{translate(#Organisation#)}</label> 
-				<div>
-					<select id="user_role-id" name="user[role_id]">
-						{generateSelect(aOrgs,user.role_id):h}
-					</select>
-				</div>
-			</li>
-			{end:}
         </ol>
     </fieldset>
 
@@ -127,6 +117,38 @@
                 <div>
                     <input id="user_mobile" class="text" type="text"
                            name="user[mobile]" value="{user.mobile}" />
+                </div>
+            </li>
+			<li>
+		        <label for="user_sex">
+		            {translate(#Sex#)}
+		        </label>
+		        <div>
+		        	{if:!user.sex}
+		            <input id="user_sex" type="radio"
+		                   name="user[sex]" value="0" checked="checked"/>{translate(#Male#)}
+					<input id="user_sex" type="radio"
+		                   name="user[sex]" value="1"/>{translate(#Female#)}
+					{else:}
+					<input id="user_sex" type="radio"
+		                   name="user[sex]" value="0"/>{translate(#Male#)}
+					<input id="user_sex" type="radio"
+		                   name="user[sex]" value="1" checked="checked"/>{translate(#Female#)}
+					{end:}
+		        </div>
+		    </li>
+			<li>
+                <label for="user_logo">{translate(#Logo#)}</label>
+                <div>
+                    <input id="user_logo" class="text" type="file"
+                           name="fLogo" value="{user.logo}" />
+                </div>
+            </li>
+			<li>
+                <label for="user_image">{translate(#Image#)}</label>
+                <div>
+                    <input id="user_image" class="text" type="file"
+                           name="fImage" value="{user.image}" />
                 </div>
             </li>
         </ol>
@@ -204,6 +226,13 @@
                     <select id="user_country" name="user[country]">
                         {generateSelect(countries,user.country):h}
                     </select>
+                </div>
+            </li>
+			<li>
+                <label for="user_history">{translate(#History#)}</label>
+                <div>
+                    <textarea id="user_history" class="text"
+                           name="user[history]">{user.history}</textarea>
                 </div>
             </li>
         </ol>

@@ -1,5 +1,6 @@
-            {foreach:blocksRight,key,valueObj}
+			{foreach:blocksBody,key,valueObj}
                 <div class="block {valueObj.body_class}">
+                	<h4>{valueObj.title}</h4>
                     <div class="content">
                         {valueObj.content:h}
                     </div>
