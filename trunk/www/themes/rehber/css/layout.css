@@ -15,6 +15,7 @@
 <?php include('superfish.css'); ?>
 <?php include('superfish-vertical.css'); ?>
 <?php include('magic-slider.css'); ?>
+<?php include('validationEngine.jquery.css'); ?>
 
 html { /* inforces screen to show scrollbar */
     height: 100%;
@@ -209,7 +210,7 @@ li.sortable-placeholder {
 .message {
     text-align: center;
     z-index: 1;
-	margin: 10px;
+	margin: 10px auto !important;
 }
 .message div {
     width: 60%;
@@ -716,6 +717,59 @@ div#leftMenu {
 	margin-top: 10px;
 }
 
+/* User Register form */
+.registerHead {
+	background: url(<?php echo $baseUrl;?>/images/bg/btnBackRed.jpg) repeat-x center;
+	width: 30%;
+	height: 42px;
+	border: 1px solid #eaeaea;
+	color: #fff;
+	font-weight: bolder;
+	padding: 0 5px;
+	transition: all 2s;
+	-webkit-transition: all 1s; /* Safari */
+	text-align: center;
+	}
+	.registerHead h4 {
+		color: #fff;
+		font-weight: bold;
+	}
+		
+.registerForm {
+	background: #eaeaea;
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		color-stop(0, #FFFFFF),
+		color-stop(1, #F7FBFC)
+	);
+	background-image: -o-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
+	background-image: -moz-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
+	background-image: -webkit-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
+	background-image: -ms-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
+	background-image: linear-gradient(to bottom, #FFFFFF 0%, #F7FBFC 100%);
+	padding: 50px;
+	border-radius: 3px;
+	border: 1px solid #eaeaea;
+}
+	.registerForm .registerBtn {
+		background: url(<?php echo $baseUrl;?>/images/bg/loginBtn.jpg) repeat-x center;
+		width: 80px;
+		height: 28px;
+		border-radius: 3px;
+		border: none;
+		color: #fff;
+		font-weight: bolder;
+		padding: 0 5px;
+		transition: all 2s;
+		-webkit-transition: all 1s; /* Safari */
+	}
+	
+	.registerForm .form-group {
+		margin-top: 10px;
+		overflow: hidden;
+	}
 /* Individual Login Block */
 #breyselLogin {
 	background-color: #fff;

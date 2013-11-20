@@ -85,6 +85,10 @@ class RegisterMgr extends SGL_Manager
         $input->aDelete     = $req->get('frmDelete');
         $input->user        = (object)$req->get('user');
         $input->usrGrp      = $req->get('usrGrp');
+        $input->role        = $req->get('role');
+        $input->aImage 		= $req->get('fImage');
+        $input->aLogo 		= $req->get('fLogo');
+        
         
         //  get referer details if present
         $input->redir = $req->get('redir');
@@ -95,7 +99,7 @@ class RegisterMgr extends SGL_Manager
             $v = new Validate();
             if (empty($input->user->username)) {
                 $input->user->username = $input->user->email;
-            } else {
+            } /* else {
                 //  username must be at least 5 chars
                 if (!$v->string($input->user->username, array(
                         'format' => VALIDATE_NUM . VALIDATE_ALPHA, 'min_length' => 5 ))) {
@@ -129,7 +133,7 @@ class RegisterMgr extends SGL_Manager
                     $aErrors['password_confirm'] = 'Passwords are not the same';
                 }
             }
-            /* //  check for data in required fields
+            //  check for data in required fields
             if (empty($input->user->addr_1)) {
                 $aErrors['addr_1'] = 'You must enter at least address 1';
             }
@@ -141,7 +145,7 @@ class RegisterMgr extends SGL_Manager
             }
             if (empty($input->user->country)) {
                 $aErrors['country'] = 'You must enter your country';
-            } */
+            }
 
             $emailNotUniqueMsg = 'This email already exist in the DB, please choose another';
             if (empty($input->user->email)) {
@@ -159,19 +163,19 @@ class RegisterMgr extends SGL_Manager
                     && !$this->da->isUniqueEmail($input->user->email)) {
                 $aErrors['email'] = $emailNotUniqueMsg;
             }
-            /* if (empty($input->user->security_question)) {
+            if (empty($input->user->security_question)) {
                 $aErrors['security_question'] = 'You must choose a security question';
             }
             if (empty($input->user->security_answer)) {
                 $aErrors['security_answer'] = 'You must provide a security answer';
-            } */
+            } 
             // check for mail header injection
             if (!empty($input->user->email)) {
                 $input->user->email =
                     SGL_Emailer::cleanMailInjection($input->user->email);
-                /* $input->user->username =
-                    SGL_Emailer::cleanMailInjection($input->user->username); */
-            }
+                $input->user->username =
+                    SGL_Emailer::cleanMailInjection($input->user->username); 
+            } */
 
             //  check for hacks - only admin user can set certain attributes
             if ((SGL_Session::getRoleId() != SGL_ADMIN
@@ -189,6 +193,7 @@ class RegisterMgr extends SGL_Manager
                 return false;
             }
         }
+        
         //  if errors have occured
         if (is_array($aErrors) && count($aErrors)) {
             SGL::raiseMsg('Please fill in the indicated fields');
@@ -244,6 +249,8 @@ class RegisterMgr extends SGL_Manager
         SGL::logMessage(null, PEAR_LOG_DEBUG);
 
         $output->template = 'userAdd.html';
+        if (isset($input->role))
+        	$output->role = $input->role;
         if (isset($input->usrGrp))
         {
         	$output->template = $input->usrGrp . '.html';
@@ -292,8 +299,8 @@ class User_AddUser extends SGL_Observable
         $da =  UserDAO::singleton();
         $oUser = $da->getUserById();
         $oUser->setFrom($this->input->user);
-        $oUser->passwdClear = $this->input->user->passwd;
-        $oUser->passwd = md5($this->input->user->passwd);
+        $oUser->passwdClear = $pass = $this->generatePassword();
+        $oUser->passwd = md5($pass);
 
         if ($this->conf['RegisterMgr']['autoEnable']) {
             $oUser->is_acct_active = 1;
@@ -301,6 +308,18 @@ class User_AddUser extends SGL_Observable
         $oUser->role_id = $defaultRoleId;
         $oUser->organisation_id = $defaultOrgId;
         $oUser->date_created = $oUser->last_updated = SGL_Date::getTime();
+        
+        if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
+        	$input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
+        	$this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
+        	$oUser->image = $input->aImage['name'];
+        }
+        if(isset($input->aLogo['name']) && $input->aLogo['name'] != "") {
+        	$input->aLogo['name'] = $this->cImage->generateUniqueFileName($input->aLogo['name']);
+        	$this->cImage->uploadImage($input->aLogo['name'], $input->aLogo['tmp_name']);
+        	$oUser->logo = $input->aLogo['name'];
+        }
+        
         $success = $da->addUser($oUser);
 
         //  make user object available to observers
@@ -320,5 +339,36 @@ class User_AddUser extends SGL_Observable
         }
         return $ret;
     }
+	
+    function generatePassword($length=9, $strength=0) {
+    	$vowels = 'aeuy';
+    	$consonants = 'bdghjmnpqrstvz';
+    	if ($strength & 1) {
+    		$consonants .= 'BDGHJLMNPQRSTVWXZ';
+    	}
+    	if ($strength & 2) {
+    		$vowels .= "AEUY";
+    	}
+    	if ($strength & 4) {
+    		$consonants .= '23456789';
+    	}
+    	if ($strength & 8) {
+    		$consonants .= '@#$%';
+    	}
+    
+    	$password = '';
+    	$alt = time() % 2;
+    	for ($i = 0; $i < $length; $i++) {
+    		if ($alt == 1) {
+    			$password .= $consonants[(rand() % strlen($consonants))];
+    			$alt = 0;
+    		} else {
+    			$password .= $vowels[(rand() % strlen($vowels))];
+    			$alt = 1;
+    		}
+    	}
+    	return $password;
+    }
+
 }
 ?>
