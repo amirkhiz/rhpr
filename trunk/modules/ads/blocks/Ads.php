@@ -54,7 +54,8 @@ class Ads_Block_Ads extends SGL_Manager
     		2 => 'video',
     		3 => 'footerFix',
     		4 => 'footerSlider',
-    		5 => 'offers'
+    		5 => 'offers',
+    		6 => 'right'
     	);
     
     function init($output, $blockId, $aParams)

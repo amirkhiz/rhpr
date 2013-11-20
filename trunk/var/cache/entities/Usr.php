@@ -20,6 +20,8 @@ class DataObjects_Usr extends DB_DataObject
     public $telephone;                       // string(16)  
     public $mobile;                          // string(16)  
     public $email;                           // string(128)  
+    public $logo;                            // string(255)  not_null
+    public $image;                           // string(255)  not_null
     public $addr_1;                          // string(128)  
     public $addr_2;                          // string(128)  
     public $addr_3;                          // string(128)  
@@ -27,6 +29,9 @@ class DataObjects_Usr extends DB_DataObject
     public $region;                          // string(32)  
     public $country;                         // string(2)  
     public $post_code;                       // string(16)  
+    public $history;                         // blob(65535)  not_null blob
+    public $sex;                             // int(4)  not_null
+    public $blood;                           // string(8)  not_null
     public $is_email_public;                 // int(6)  
     public $is_acct_active;                  // int(6)  
     public $security_question;               // int(6)  

@@ -4,6 +4,7 @@ $aBlocksNames = array(
     'Left' => 'Left',
     'Top' => 'Top',
     'Bottom' => 'Bottom',
+	'Body' => 'Body',
     'BodyTop' => 'BodyTop',
     'AdminCategory' => 'AdminCategory',
     'AdminNav' => 'AdminNav',

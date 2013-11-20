@@ -1,7 +1,7 @@
 <?php
 /* Reminder: always indent with 4 spaces (no tabs). */
 // +---------------------------------------------------------------------------+
-// | Copyright (c) 2010, Demian Turner                                         |
+// | Copyright (c) 2008, Demian Turner                                         |
 // | All rights reserved.                                                      |
 // |                                                                           |
 // | Redistribution and use in source and binary forms, with or without        |
@@ -30,56 +30,66 @@
 // | OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.      |
 // |                                                                           |
 // +---------------------------------------------------------------------------+
-// | Seagull 1.0                                                               |
+// | Seagull 0.6                                                               |
 // +---------------------------------------------------------------------------+
-// | DefaultMgr.php                                                            |
+// | Ads.php                                                                   |
 // +---------------------------------------------------------------------------+
-// | Author:   Demian Turner <demian@phpkitchen.com>                           |
+// | Author: Siavash AmirKhiz <amirkhiz@gmail.com>                             |
 // +---------------------------------------------------------------------------+
-// $Id: DefaultMgr.php,v 1.12 2005/04/21 06:34:39 demian Exp $
-
+include_once 'DB/DataObject.php';
 /**
- * Sets up objects for home page.
+ * Creates static html blocks.
  *
- * @package default
- * @author  Demian Turner <demian@phpkitchen.com>
- * @version $Revision: 1.12 $
+ * @package block
+ * @author  Author: Siavash AmirKhiz <amirkhiz@gmail.com>
+ * @version 1.0
  */
-class DefaultMgr extends SGL_Manager
+class User_Block_History extends SGL_Manager
 {
-    function DefaultMgr()
+	var $template = 'historyBlock.html';
+    var $templatePath 	= 'user';
+    
+    function init($output, $blockId, $aParams)
     {
         SGL::logMessage(null, PEAR_LOG_DEBUG);
-        parent::__construct();
-
-        $this->pageTitle    = 'Home';
-        $this->template     = 'home.html';
-
-        $this->_aActionsMapping =  array(
-            'list'   => array('list'),
-        );
+            
+        return $this->getBlockContent($aParams);
     }
 
-    function validate($req, &$input)
+    function getBlockContent($aParams)
     {
-        SGL::logMessage(null, PEAR_LOG_DEBUG);
-        $this->validated    = true;
-        $input->masterTemplate = 'masterHome.html';
-        $input->template    = $this->template;
-        $input->pageTitle   = $this->pageTitle;
-
-        // congratulate user on successful install their first visit
-        $input->welcome     = $req->get('welcome');
-        if ($input->welcome) {
-            SGL::raiseMsg('Congratulations, install successful!', false, SGL_MESSAGE_INFO);
-        }
-
-        $input->action      = ($req->get('action')) ? $req->get('action') : 'list';
+        $blockOutput = new SGL_Output();
+        $blockOutput->history = $this->makedata($aParams);
+        $blockOutput->webRoot = SGL_BASE_URL;
+        return $this->process($blockOutput);
     }
-
-    function _cmd_list($input, $output)
+    
+    function makedata($aParams)
     {
-        SGL::logMessage(null, PEAR_LOG_DEBUG);
+    	$users = DB_DataObject::factory($this->conf['table']['user']);
+    	$users->whereAdd('usr_id IN (' . $aParams['companyId'] . ')');
+    	$users->find();
+    	$aUsers = array();
+    	while ($users->fetch())
+    	{
+    		$aUsers[] = clone $users;
+    	}
+    	//echo '<pre>';print_r($aUsers);echo '</pre>';die;
+    	return $aUsers;
     }
+    
+	function process($output)
+    {
+ 		SGL::logMessage(null, PEAR_LOG_DEBUG);
+
+ 		// use moduleName for template path setting
+ 		$output->moduleName     = $this->templatePath;
+ 		$output->masterTemplate = $this->template;
+ 		$output->conf=$conf;
+ 		 
+ 		$view = new SGL_HtmlSimpleView($output);
+ 		return $view->render();
+    }
+    
 }
 ?>

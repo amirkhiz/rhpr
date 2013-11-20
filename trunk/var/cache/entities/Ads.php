@@ -14,8 +14,8 @@ class DataObjects_Ads extends DB_DataObject
     public $usr_id;                          // int(11)  not_null
     public $title;                           // string(100)  not_null
     public $description;                     // blob(65535)  not_null blob
-    public $start_date;                      // date(10)  not_null binary
-    public $end_date;                        // date(10)  not_null binary
+    public $start_date;                      // datetime(19)  not_null binary
+    public $end_date;                        // datetime(19)  not_null binary
     public $weight;                          // int(11)  not_null
     public $image;                           // blob(65535)  not_null blob
     public $url;                             // string(255)  not_null

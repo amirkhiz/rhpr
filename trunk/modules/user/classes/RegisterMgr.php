@@ -84,7 +84,8 @@ class RegisterMgr extends SGL_Manager
         $input->userID      = $req->get('frmUserID');
         $input->aDelete     = $req->get('frmDelete');
         $input->user        = (object)$req->get('user');
-
+        $input->usrGrp      = $req->get('usrGrp');
+        
         //  get referer details if present
         $input->redir = $req->get('redir');
 
@@ -93,7 +94,7 @@ class RegisterMgr extends SGL_Manager
                 || in_array($input->action, array('insert', 'update'))) {
             $v = new Validate();
             if (empty($input->user->username)) {
-                $aErrors['username'] = 'You must enter a username';
+                $input->user->username = $input->user->email;
             } else {
                 //  username must be at least 5 chars
                 if (!$v->string($input->user->username, array(
@@ -128,7 +129,7 @@ class RegisterMgr extends SGL_Manager
                     $aErrors['password_confirm'] = 'Passwords are not the same';
                 }
             }
-            //  check for data in required fields
+            /* //  check for data in required fields
             if (empty($input->user->addr_1)) {
                 $aErrors['addr_1'] = 'You must enter at least address 1';
             }
@@ -140,7 +141,7 @@ class RegisterMgr extends SGL_Manager
             }
             if (empty($input->user->country)) {
                 $aErrors['country'] = 'You must enter your country';
-            }
+            } */
 
             $emailNotUniqueMsg = 'This email already exist in the DB, please choose another';
             if (empty($input->user->email)) {
@@ -158,18 +159,18 @@ class RegisterMgr extends SGL_Manager
                     && !$this->da->isUniqueEmail($input->user->email)) {
                 $aErrors['email'] = $emailNotUniqueMsg;
             }
-            if (empty($input->user->security_question)) {
+            /* if (empty($input->user->security_question)) {
                 $aErrors['security_question'] = 'You must choose a security question';
             }
             if (empty($input->user->security_answer)) {
                 $aErrors['security_answer'] = 'You must provide a security answer';
-            }
+            } */
             // check for mail header injection
             if (!empty($input->user->email)) {
                 $input->user->email =
                     SGL_Emailer::cleanMailInjection($input->user->email);
-                $input->user->username =
-                    SGL_Emailer::cleanMailInjection($input->user->username);
+                /* $input->user->username =
+                    SGL_Emailer::cleanMailInjection($input->user->username); */
             }
 
             //  check for hacks - only admin user can set certain attributes
@@ -193,6 +194,8 @@ class RegisterMgr extends SGL_Manager
             SGL::raiseMsg('Please fill in the indicated fields');
             $input->error = $aErrors;
             $input->template = 'userAdd.html';
+            if (isset($input->usrGrp))
+            	$input->template = $input->usrGrp . '.html';
             $this->validated = false;
         }
 
@@ -241,6 +244,11 @@ class RegisterMgr extends SGL_Manager
         SGL::logMessage(null, PEAR_LOG_DEBUG);
 
         $output->template = 'userAdd.html';
+        if (isset($input->usrGrp))
+        {
+        	$output->template = $input->usrGrp . '.html';
+        	$output->pageTitle = $input->usrGrp;
+        }
         $output->user = DB_DataObject::factory($this->conf['table']['user']);
         $output->user->password_confirm = (isset($input->user->password_confirm)) ?
             $input->user->password_confirm : '';

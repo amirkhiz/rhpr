@@ -56,7 +56,8 @@ class AdminAdsMgr extends SGL_Manager
         		2 => 'Video Block',
         		3 => 'Footer Fix Block',
         		4 => 'Footer Slide Block',
-				5 => 'Offers Block'
+				5 => 'Offers Block',
+				6 => 'Right Block'
         );
 	
     function __construct()
@@ -121,19 +122,6 @@ class AdminAdsMgr extends SGL_Manager
 		}
 		$output->aUsers = $aUsers;
 		
-		/*
-		 * Find Blocks From the block table to fetch in select box
-		*  */
-		/* $block = DB_DataObject::factory($this->conf['table']['block']);
-		$block->selectAdd();
-		$block->selectAdd('block_id, title');
-		$block->whereAdd('is_enabled = 1');
-		$block->find();
-		
-		$aBlocks = array();
-		while ($block->fetch()) {
-			$aBlocks[$block->block_id] = $block->title;
-		}*/
 		$output->aBlocks = $this->aBlocks; 
 		
 	}
