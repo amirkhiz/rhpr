@@ -20,6 +20,6 @@
         <a class="forgetPassword" href="{makeUrl(##,#password#,#user#)}">{translate(#Forgot Password#)}</a>
     </p>
 	<div class="registerBtn" flexy:if="conf[RegisterMgr][enabled]">
-        <a href="{makeUrl(##,#register#,#user#)}usrGrp/institutional">{translate(#Institutional Register#)}</a>
+        <a href="{makeUrl(##,#register#,#user#)}usrGrp/{role}">{translate(#Institutional Register#)}</a>
     </div>
 </form>

@@ -62,8 +62,10 @@ class RegisterMgr extends SGL_Manager
         parent::__construct();
 
         $this->pageTitle    = 'Register';
-        $this->template     = 'userAdd.html';
+        $this->template		= 'individual.html';
         $this->da           =  UserDAO::singleton();
+        $this->institutionalTheme = 'institutional';
+        $this->individualTheme = 'individual';
 
         $this->_aActionsMapping =  array(
             'add'       => array('add'),
@@ -71,14 +73,14 @@ class RegisterMgr extends SGL_Manager
         );
     }
 
-    function validate(&$req, &$input)
+    function validate($req, $input)
     {
         SGL::logMessage(null, PEAR_LOG_DEBUG);
         $this->validated    = true;
         $input->error       = array();
+        $input->template	= $this->template;
         $input->pageTitle   = $this->pageTitle;
         $input->masterTemplate = $this->masterTemplate;
-        $input->template    = $this->template;
         $input->sortBy      = SGL_Util::getSortBy($req->get('frmSortBy'), SGL_SORTBY_USER);
         $input->sortOrder   = SGL_Util::getSortOrder($req->get('frmSortOrder'));
         $input->action      = ($req->get('action')) ? $req->get('action') : 'add';
@@ -86,11 +88,11 @@ class RegisterMgr extends SGL_Manager
         $input->userID      = $req->get('frmUserID');
         $input->aDelete     = $req->get('frmDelete');
         $input->user        = (object)$req->get('user');
-        $input->branch      = (object)$req->get('branch');
-        $input->usrGrp      = $req->get('usrGrp');
+        $input->regGrp      = $req->get('regGrp');
         $input->role        = $req->get('role');
         $input->aImage 		= $req->get('fImage');
         $input->aLogo 		= $req->get('fLogo');
+        $input->branch      = (object)$req->get('branch');
         $input->aBranchImg	= $req->get('fBranchImage');
         
         
@@ -136,20 +138,7 @@ class RegisterMgr extends SGL_Manager
                 } elseif ($input->user->passwd != $input->user->password_confirm) {
                     $aErrors['password_confirm'] = 'Passwords are not the same';
                 }
-            }
-            //  check for data in required fields
-            if (empty($input->user->addr_1)) {
-                $aErrors['addr_1'] = 'You must enter at least address 1';
-            }
-            if (empty($input->user->city)) {
-                $aErrors['city'] = 'You must enter your city';
-            }
-            if (empty($input->user->post_code)) {
-                $aErrors['post_code'] = 'You must enter your ZIP/Postal Code';
-            }
-            if (empty($input->user->country)) {
-                $aErrors['country'] = 'You must enter your country';
-            }
+            } */
 
             $emailNotUniqueMsg = 'This email already exist in the DB, please choose another';
             if (empty($input->user->email)) {
@@ -167,20 +156,18 @@ class RegisterMgr extends SGL_Manager
                     && !$this->da->isUniqueEmail($input->user->email)) {
                 $aErrors['email'] = $emailNotUniqueMsg;
             }
-            if (empty($input->user->security_question)) {
-                $aErrors['security_question'] = 'You must choose a security question';
-            }
-            if (empty($input->user->security_answer)) {
-                $aErrors['security_answer'] = 'You must provide a security answer';
-            } 
             // check for mail header injection
             if (!empty($input->user->email)) {
                 $input->user->email =
                     SGL_Emailer::cleanMailInjection($input->user->email);
-                $input->user->username =
-                    SGL_Emailer::cleanMailInjection($input->user->username); 
-            } */
+            }
+            // check for mail header injection
+            if (!empty($input->user->email_2)) {
+            	$input->user->email_2 =
+            	SGL_Emailer::cleanMailInjection($input->user->email);
+            }
 
+            //echo '<pre>';print_r($aErrors);echo '</pre>';die;
             //  check for hacks - only admin user can set certain attributes
             if ((SGL_Session::getRoleId() != SGL_ADMIN
                     && count(array_filter(array_flip($req->get('user')), array($this, 'containsDisallowedKeys'))))) {
@@ -203,8 +190,17 @@ class RegisterMgr extends SGL_Manager
             SGL::raiseMsg('Please fill in the indicated fields');
             $input->error = $aErrors;
             $input->template = 'userAdd.html';
-            if (isset($input->usrGrp))
-            	$input->template = $input->usrGrp . '.html';
+            if (isset($input->regGrp))
+            	switch ($input->regGrp)
+            	{
+            		case SGL_INSTITUTIONAL:
+            			$input->template = $this->institutionalTheme . '.html';
+            			break;
+            		case SGL_INDIVIDUAL:
+            			$input->template = $this->individualTheme . '.html';
+            			break;
+            	}
+            	
             $this->validated = false;
         }
 
@@ -252,22 +248,28 @@ class RegisterMgr extends SGL_Manager
     {
         SGL::logMessage(null, PEAR_LOG_DEBUG);
 
-        $output->template = 'userAdd.html';
+        $output->template = $this->template;
+        $output->role = SGL_INDIVIDUAL;
+        $output->institutional = SGL_INSTITUTIONAL;
+        $output->individual = SGL_INDIVIDUAL;
+        
         if (isset($input->role))
         	$output->role = $input->role;
-        if (isset($input->usrGrp))
+        if (isset($input->regGrp))
         {
-        	$output->template = $input->usrGrp . '.html';
-        	$output->pageTitle = ucfirst($input->usrGrp);
-        	switch ($input->usrGrp)
-        	{
-        		case 'institutional':
-        			$output->role = SGL_INSTITUTIONAL;
-        			break;
-        		case 'individual':
-        			$output->role = SGL_INDIVIDUAL;
-        			break;
-        	}
+           	switch ($input->regGrp)
+            {
+            	case SGL_INSTITUTIONAL:
+            		$output->template = $this->institutionalTheme . '.html';
+            		$output->pageTitle = ucfirst($this->institutionalTheme);
+            		$output->role = SGL_INSTITUTIONAL;
+            		break;
+            	case SGL_INDIVIDUAL:
+            		$output->template = $this->individualTheme . '.html';
+            		$output->pageTitle = ucfirst($this->individualTheme);
+            		$output->role = SGL_INDIVIDUAL;
+            		break;
+            }
         }
         $output->user = DB_DataObject::factory($this->conf['table']['user']);
         $output->user->password_confirm = (isset($input->user->password_confirm)) ?
@@ -290,8 +292,7 @@ class RegisterMgr extends SGL_Manager
         }
         //  returns id for new user
         $output->uid = $addUser->run();
-        //if (isset($input->branch))
-        	//$result = $addUser->addBranches();
+        SGL_HTTP::redirect(array('moduleName' => 'default', 'managerName' => 'default'));
     }
     
     function _editDisplay($input, $output)
@@ -299,7 +300,7 @@ class RegisterMgr extends SGL_Manager
     	$output->aCats 		= array('cat1', 'cat2', 'cat3');
     	$output->aVills 	= array('vill1', 'vill2', 'vill3');
     	$output->aCity 		= array('city1', 'city2', 'city3');
-    	$output->aCountry 	= array('country1', 'country2', 'country3');
+    	$output->aRegion 	= array('region1', 'region2', 'region3');
     }
 }
 
@@ -327,11 +328,13 @@ class User_AddUser extends SGL_Observable
         $oUser->setFrom($this->input->user);
         $oUser->passwdClear = $pass = $this->generatePassword();
         $oUser->passwd = md5($pass);
+        $oUser->temp_pass = $pass;
 
         if ($this->conf['RegisterMgr']['autoEnable']) {
             $oUser->is_acct_active = 1;
         }
         
+        $oUser->has_branch = (isset($this->input->user->has_branch)) ? 1 : 0;
         $oUser->role_id = (isset($this->input->role)) ? $this->input->role : $defaultRoleId;
         $oUser->organisation_id = $defaultOrgId;
         $oUser->date_created = $oUser->last_updated = SGL_Date::getTime();

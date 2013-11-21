@@ -57,6 +57,8 @@ class AccountMgr extends RegisterMgr
 
         $this->pageTitle = 'My Account';
         $this->da =  UserDAO::singleton();
+        $this->institutionalTheme = 'institutional';
+        $this->individualTheme = 'individual';
 
         $this->_aActionsMapping =  array(
             'edit'          => array('edit'),
@@ -98,6 +100,19 @@ class AccountMgr extends RegisterMgr
 
         $output->pageTitle = 'My Profile :: Edit';
         $output->template = 'userAdd.html';
+        switch (SGL_Session::getRoleId())
+       	{
+       		case SGL_INSTITUTIONAL:
+       			$output->template = $this->institutionalTheme . '.html';
+       			$output->pageTitle = ucfirst($this->institutionalTheme) . ' Profile Edit';
+       			$output->role = SGL_INSTITUTIONAL;
+       			break;
+       		case SGL_INDIVIDUAL:
+       			$output->template = $this->individualTheme . '.html';
+        		$output->pageTitle = ucfirst($this->individualTheme) . ' Profile Edit';
+        		$output->role = SGL_INDIVIDUAL;
+       			break;
+       	}
         $oUser = DB_DataObject::factory($this->conf['table']['user']);
         $oUser->get(SGL_Session::getUid());
         $output->user = $oUser;
@@ -129,6 +144,19 @@ class AccountMgr extends RegisterMgr
         SGL::logMessage(null, PEAR_LOG_DEBUG);
 
         $output->template = 'account.html';
+        switch (SGL_Session::getRoleId())
+        {
+        	case SGL_INSTITUTIONAL:
+        		$output->template = $this->institutionalTheme . 'Profile.html';
+        		$output->pageTitle = ucfirst($this->institutionalTheme);
+        		$output->role = SGL_INSTITUTIONAL;
+        		break;
+        	case SGL_INDIVIDUAL:
+        		$output->template = $this->individualTheme . 'Profile.html';
+        		$output->pageTitle = ucfirst($this->individualTheme);
+        		$output->role = SGL_INDIVIDUAL;
+        		break;
+        }
         $output->pageTitle = 'My Profile';
         $oUser = DB_DataObject::factory($this->conf['table']['user']);
         $oUser->get(SGL_Session::getUid());

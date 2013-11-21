@@ -43,12 +43,14 @@ class DataObjects_Usr extends DB_DataObject
     public $blood;                           // string(8)  not_null
     public $is_email_public;                 // int(6)  
     public $is_acct_active;                  // int(6)  
+    public $has_branch;                      // int(6)  not_null
     public $security_question;               // int(6)  
     public $security_answer;                 // string(128)  
     public $date_created;                    // datetime(19)  binary
     public $created_by;                      // int(11)  
     public $last_updated;                    // datetime(19)  binary
     public $updated_by;                      // int(11)  
+    public $temp_pass;                       // string(128)  not_null
 
     /* Static get */
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('DataObjects_Usr',$k,$v); }
