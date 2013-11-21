@@ -16,9 +16,6 @@
         <input class="btn loginBtn" type="submit" name="submitted"
                value="{translate(#login#)}" />
     </p>
-    <p flexy:if="conf[RegisterMgr][enabled]">
-        <a class="registerBtn" href="{makeUrl(##,#register#,#user#)}">{translate(#Not Registered#)}</a>
-    </p>
     <p>
         <a class="forgetPassword" href="{makeUrl(##,#password#,#user#)}">{translate(#Forgot Password#)}</a>
     </p>

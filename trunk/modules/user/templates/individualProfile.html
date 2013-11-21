@@ -1,0 +1,26 @@
+<h1>{translate(pageTitle)}</h1>
+<div class="message">{msgGet():h}</div>
+
+<div class="fieldsetlike">
+    <h3>{translate(#Personal Details#)}</h3>
+    <dl>
+        <dt>{translate(#First Name#)}</dt>
+        <dd>{user.first_name}&nbsp;</dd>
+        <dt>{translate(#Last Name#)}</dt>
+        <dd>{user.last_name}&nbsp;</dd>
+        <dt>{translate(#Email#)}</dt>
+        <dd>{user.email}</dd>
+        <dt>{translate(#Mobile#)}</dt>
+        <dd>{user.mobile}&nbsp;</dd>
+		<dt>{translate(#Blood Group#)}</dt>
+        <dd>{user.blood}&nbsp;</dd>
+        <dt>{translate(#City#)}</dt>
+        <dd>{user.city_id}&nbsp;</dd>
+    </dl>
+</div>
+
+<p>
+    <a href="{makeUrl(#edit#,#account#,#user#)}">{translate(#edit these values#)}</a>
+    &nbsp;&nbsp;&nbsp;
+    <a href="{makeUrl(#summary#,#account#,#user#)}">{translate(#back#,#ucfirst#)}</a>
+</p>

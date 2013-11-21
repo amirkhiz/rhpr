@@ -20,6 +20,7 @@ $manager = isset($_GET['aParams']['manager'])
     : '';
 
 $isFormSubmitted = resolveFormStatus();
+$errorMessage = '#ff0000';
 
 /**
  * Get current theme name.

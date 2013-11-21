@@ -102,6 +102,7 @@ class User_Block_Login2
             $blockOutput->loggedOnSince  = isset($output->loggedOnSince) ? $output->loggedOnSince : '';
         }
 
+        $blockOutput->role = $aParams['loginRoleId'];
         return $this->process($blockOutput);
     }
 
