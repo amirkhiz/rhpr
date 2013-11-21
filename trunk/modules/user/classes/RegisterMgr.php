@@ -84,10 +84,12 @@ class RegisterMgr extends SGL_Manager
         $input->userID      = $req->get('frmUserID');
         $input->aDelete     = $req->get('frmDelete');
         $input->user        = (object)$req->get('user');
+        $input->user        = (object)$req->get('branch');
         $input->usrGrp      = $req->get('usrGrp');
         $input->role        = $req->get('role');
         $input->aImage 		= $req->get('fImage');
         $input->aLogo 		= $req->get('fLogo');
+        $input->aBranchImg	= $req->get('fBranchImage');
         
         
         //  get referer details if present
@@ -276,6 +278,7 @@ class RegisterMgr extends SGL_Manager
         }
         //  returns id for new user
         $output->uid = $addUser->run();
+        $result = $addUser->addBranches();
     }
 }
 
@@ -338,6 +341,60 @@ class User_AddUser extends SGL_Observable
             $ret = false;
         }
         return $ret;
+    }
+    
+    
+    function addBranches()
+    {
+    	SGL::logMessage(null, PEAR_LOG_DEBUG);
+    
+    	//  get default values for new users
+    	$this->conf = $this->input->getConfig();
+    	$defaultRoleId = $this->conf['RegisterMgr']['defaultRoleId'];
+    	$defaultOrgId  = $this->conf['RegisterMgr']['defaultOrgId'];
+    
+    	$da =  UserDAO::singleton();
+    	$oUser = $da->getUserById();
+    	$oUser->setFrom($this->input->user);
+    	$oUser->passwdClear = $pass = $this->generatePassword();
+    	$oUser->passwd = md5($pass);
+    
+    	if ($this->conf['RegisterMgr']['autoEnable']) {
+    		$oUser->is_acct_active = 1;
+    	}
+    	$oUser->role_id = $defaultRoleId;
+    	$oUser->organisation_id = $defaultOrgId;
+    	$oUser->date_created = $oUser->last_updated = SGL_Date::getTime();
+    
+    	if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
+    		$input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
+    		$this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
+    		$oUser->image = $input->aImage['name'];
+    	}
+    	if(isset($input->aLogo['name']) && $input->aLogo['name'] != "") {
+    		$input->aLogo['name'] = $this->cImage->generateUniqueFileName($input->aLogo['name']);
+    		$this->cImage->uploadImage($input->aLogo['name'], $input->aLogo['tmp_name']);
+    		$oUser->logo = $input->aLogo['name'];
+    	}
+    
+    	$success = $da->addUser($oUser);
+    
+    	//  make user object available to observers
+    	$this->oUser = $oUser;
+    
+    	if ($success) {
+    		//  set user id for use in observers
+    		$this->oUser->usr_id = $success;
+    		//  invoke observers
+    		$this->notify();
+    		$ret = $success;
+    		SGL::raiseMsg('user successfully registered', true, SGL_MESSAGE_INFO);
+    	} else {
+    		SGL::raiseError('There was a problem inserting the record',
+    				SGL_ERROR_NOAFFECTEDROWS);
+    		$ret = false;
+    	}
+    	return $ret;
     }
 	
     function generatePassword($length=9, $strength=0) {
