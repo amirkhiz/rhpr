@@ -44,6 +44,8 @@ require_once SGL_CORE_DIR . '/Observer.php';
 require_once SGL_CORE_DIR . '/Emailer.php';
 require_once 'Validate.php';
 require_once 'DB/DataObject.php';
+include_once SGL_MOD_DIR  . '/user/classes/Image.php';
+include_once SGL_CORE_DIR . '/Image.php';
 
 /**
  * Manages User objects.
@@ -84,7 +86,7 @@ class RegisterMgr extends SGL_Manager
         $input->userID      = $req->get('frmUserID');
         $input->aDelete     = $req->get('frmDelete');
         $input->user        = (object)$req->get('user');
-        $input->user        = (object)$req->get('branch');
+        $input->branch      = (object)$req->get('branch');
         $input->usrGrp      = $req->get('usrGrp');
         $input->role        = $req->get('role');
         $input->aImage 		= $req->get('fImage');
@@ -256,11 +258,21 @@ class RegisterMgr extends SGL_Manager
         if (isset($input->usrGrp))
         {
         	$output->template = $input->usrGrp . '.html';
-        	$output->pageTitle = $input->usrGrp;
+        	$output->pageTitle = ucfirst($input->usrGrp);
+        	switch ($input->usrGrp)
+        	{
+        		case 'institutional':
+        			$output->role = SGL_INSTITUTIONAL;
+        			break;
+        		case 'individual':
+        			$output->role = SGL_INDIVIDUAL;
+        			break;
+        	}
         }
         $output->user = DB_DataObject::factory($this->conf['table']['user']);
         $output->user->password_confirm = (isset($input->user->password_confirm)) ?
             $input->user->password_confirm : '';
+		$this->_editDisplay($input, $output);
     }
 
     function _cmd_insert($input, $output)
@@ -278,16 +290,27 @@ class RegisterMgr extends SGL_Manager
         }
         //  returns id for new user
         $output->uid = $addUser->run();
-        $result = $addUser->addBranches();
+        //if (isset($input->branch))
+        	//$result = $addUser->addBranches();
+    }
+    
+    function _editDisplay($input, $output)
+    {
+    	$output->aCats 		= array('cat1', 'cat2', 'cat3');
+    	$output->aVills 	= array('vill1', 'vill2', 'vill3');
+    	$output->aCity 		= array('city1', 'city2', 'city3');
+    	$output->aCountry 	= array('country1', 'country2', 'country3');
     }
 }
 
 class User_AddUser extends SGL_Observable
 {
+	var $cImage;
     function User_AddUser($input, $output)
     {
         $this->input = $input;
         $this->output = $output;
+        $this->cImage = Image::singleton();
     }
 
     function run()
@@ -308,19 +331,24 @@ class User_AddUser extends SGL_Observable
         if ($this->conf['RegisterMgr']['autoEnable']) {
             $oUser->is_acct_active = 1;
         }
-        $oUser->role_id = $defaultRoleId;
+        
+        $oUser->role_id = (isset($this->input->role)) ? $this->input->role : $defaultRoleId;
         $oUser->organisation_id = $defaultOrgId;
         $oUser->date_created = $oUser->last_updated = SGL_Date::getTime();
+        $oUser->telephone_1 = str_replace(' ', '', $this->input->user->telephone_1);
+        $oUser->telephone_2 = str_replace(' ', '', $this->input->user->telephone_2);
+        $oUser->fax = str_replace(' ', '', $this->input->user->fax);
+        $oUser->mobile = str_replace(' ', '', $this->input->user->mobile);
         
-        if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
-        	$input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
-        	$this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
-        	$oUser->image = $input->aImage['name'];
+        if(isset($this->input->aImage['name']) && $this->input->aImage['name'] != "") {
+        	$this->input->aImage['name'] = $this->cImage->generateUniqueFileName($this->input->aImage['name']);
+        	$this->cImage->uploadImage($this->input->aImage['name'], $this->input->aImage['tmp_name']);
+        	$oUser->image = $this->input->aImage['name'];
         }
-        if(isset($input->aLogo['name']) && $input->aLogo['name'] != "") {
-        	$input->aLogo['name'] = $this->cImage->generateUniqueFileName($input->aLogo['name']);
-        	$this->cImage->uploadImage($input->aLogo['name'], $input->aLogo['tmp_name']);
-        	$oUser->logo = $input->aLogo['name'];
+        if(isset($this->input->aLogo['name']) && $this->input->aLogo['name'] != "") {
+        	$this->input->aLogo['name'] = $this->cImage->generateUniqueFileName($this->input->aLogo['name']);
+        	$this->cImage->uploadImage($this->input->aLogo['name'], $this->input->aLogo['tmp_name']);
+        	$oUser->logo = $this->input->aLogo['name'];
         }
         
         $success = $da->addUser($oUser);

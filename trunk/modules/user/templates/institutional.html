@@ -5,9 +5,10 @@
 	</ul>
 	<div id="tabs-1">
 		
-		<form id="form-group" method="post" action="" flexy:ignore>
+		<form id="form-group" method="post" action="" flexy:ignore enctype="multipart/form-data">
 		    <fieldset class="hide">
 		        <input type="hidden" name="action"value="insert" />
+				<input type="hidden" name="role"value="{role}" />
 		        {if:redir}
 		        <input type="hidden" name="redir" value="{redir}" />
 		        {end:}
@@ -99,7 +100,7 @@
 		        <label class="col-lg-5" for="user_site-name">{translate(#Web Site#)}</label>
 				<label class="col-lg-1" for="user_site-name">:</label>
 	            <input id="user_site-name" class="validate[custom[url]] text" type="text"
-	                   name="user[site_name]" value="{user.site_name}" />
+	                   name="user[site_name]" value="http://{user.site_name}" />
 		    </div>
 			<div class="form-group">
 		        <label class="col-lg-5" for="user_facebook">{translate(#Facebook#)}</label>
