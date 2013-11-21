@@ -288,8 +288,8 @@ class SGL_Task_SetupConstantsStart extends SGL_Task
         define('SGL_GUEST',                     0);
         define('SGL_ADMIN',                     1);
         define('SGL_MEMBER',                    2);
-        define('SGL_ORG',                       4);
-        define('SGL_SIGNLE',                    5);
+        define('SGL_INSTITUTIONAL',             4);
+        define('SGL_INDIVIDUAL',                5);
 
         define('SGL_STATUS_DELETED',            0);
         define('SGL_STATUS_FOR_APPROVAL',       1);
