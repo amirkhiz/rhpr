@@ -718,23 +718,6 @@ div#leftMenu {
 }
 
 /* User Register form */
-.registerHead {
-	background: url(<?php echo $baseUrl;?>/images/bg/btnBackRed.jpg) repeat-x center;
-	width: 30%;
-	height: 42px;
-	border: 1px solid #eaeaea;
-	color: #fff;
-	font-weight: bolder;
-	padding: 0 5px;
-	transition: all 2s;
-	-webkit-transition: all 1s; /* Safari */
-	text-align: center;
-	}
-	.registerHead h4 {
-		color: #fff;
-		font-weight: bold;
-	}
-		
 .registerForm {
 	background: #eaeaea;
 	background-image: -webkit-gradient(
@@ -749,7 +732,7 @@ div#leftMenu {
 	background-image: -webkit-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
 	background-image: -ms-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
 	background-image: linear-gradient(to bottom, #FFFFFF 0%, #F7FBFC 100%);
-	padding: 50px;
+	padding: 15px 3px;
 	border-radius: 3px;
 	border: 1px solid #eaeaea;
 }
@@ -770,6 +753,67 @@ div#leftMenu {
 		margin-top: 10px;
 		overflow: hidden;
 	}
+	
+.registerHead {
+	background: url(<?php echo $baseUrl;?>/images/bg/btnBackRed.jpg) repeat-x center;
+	border: 1px solid #eaeaea;
+	width: 20%;
+	height: 39px;
+}
+	.registerHead h4 {
+		color: #fff;
+		text-align: center;
+		line-height: 18px;
+	}
+	
+/* Users Register Tabs Style */
+.ui-widget-content {
+	background: none;
+	border: none;
+}
+.ui-widget-header {
+	background: none;
+	border: none;
+}
+.ui-tabs .ui-tabs-nav {
+	padding: 0;
+}
+	.ui-tabs .ui-tabs-nav li {
+		transition: all 0.5s;
+		-webkit-transition: all 0.5s; /* Safari */
+		text-align: center;
+		border-radius: 0;
+		background: none;
+		margin: 0;
+	}
+	.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+		background: url(<?php echo $baseUrl;?>/images/bg/btnBackRed.jpg) repeat-x center;
+		border: 1px solid #eaeaea;
+		color: #fff;
+		font-weight: bolder;
+	}
+		.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+			color: #fff;
+		}
+	.ui-tabs .ui-tabs-panel {
+		background: #eaeaea;
+		background-image: -webkit-gradient(
+			linear,
+			left top,
+			left bottom,
+			color-stop(0, #FFFFFF),
+			color-stop(1, #F7FBFC)
+		);
+		background-image: -o-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
+		background-image: -moz-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
+		background-image: -webkit-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
+		background-image: -ms-linear-gradient(bottom, #FFFFFF 0%, #F7FBFC 100%);
+		background-image: linear-gradient(to bottom, #FFFFFF 0%, #F7FBFC 100%);
+		padding: 15px 3px;
+		border-radius: 3px;
+		border: 1px solid #eaeaea;
+	}
+	
 /* Individual Login Block */
 #breyselLogin {
 	background-color: #fff;
@@ -957,3 +1001,4 @@ div#leftMenu {
 			padding: 10px 0;
 			text-align: center;
 		}
+
