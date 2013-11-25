@@ -1108,3 +1108,36 @@ div#leftMenu {
 			text-align: center;
 		}
 
+.breadcrumb {
+	background: none;
+	margin-bottom: 5px;
+}
+
+/* Institutional Profile Style */
+.profileLogo {
+	float: left;
+	border: 1px solid #eaeaea;
+	width: 335px;
+	height: 335px;
+	line-height: 335px;
+}
+.profileDetail {
+	float: left;
+	width: 453px;
+}
+	.profileDetail dl dt, .profileDetail dl dd {
+		margin-bottom: 15px;
+	}
+
+.profileContacts {
+	height: 25px;
+}
+	.profileContacts .profileIcons {
+		width: 25px;
+		height: 25px;
+		float: left;
+	}
+	.profileContacts .iconMail {
+		background: url(<?php echo $baseUrl?>/images/bg/mail.png) no-repeat center;
+		margin-right: 2px;
+	}

@@ -490,8 +490,9 @@ class UserMgr extends RegisterMgr
 
         require_once 'Text/Password.php';
         $oPassword = new Text_Password();
-        $passwd = $oPassword->create();
+        $passwd = $oPassword->create(10, 'unpronounceable', '');
         $oUser = $this->da->getUserById($input->userID);
+        $oUser->temp_pass = $passwd;
         $oUser->passwd = md5($passwd);
         $success = $oUser->update();
         if ($input->passwdResetNotify && $success !== false) {

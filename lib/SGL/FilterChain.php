@@ -39,7 +39,7 @@ class SGL_FilterChain
     {
         foreach ($this->aFilters as $filter) {
             if (!class_exists($filter)) {
-                $path = trim(preg_replace('/_/', '/', $filter)) . '.php';
+                echo $path = trim(preg_replace('/_/', '/', $filter)) . '.php';exit
                 require_once $path;
             }
         }

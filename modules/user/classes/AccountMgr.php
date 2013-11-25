@@ -73,7 +73,7 @@ class AccountMgr extends RegisterMgr
         SGL::logMessage(null, PEAR_LOG_DEBUG);
 
         parent::validate($req, $input);
-        $input->action = ($req->get('action')) ? $req->get('action') : 'summary';
+        $input->action = ($req->get('action')) ? $req->get('action') : 'viewProfile';
         $input->user->is_email_public = (isset($input->user->is_email_public)) ? 1 : 0;
     }
 
@@ -118,6 +118,7 @@ class AccountMgr extends RegisterMgr
         $output->user = $oUser;
         $output->user->username_orig = $oUser->username;
         $output->user->email_orig = $oUser->email;
+        $this->_editDisplay($input, $output);
     }
 
     function _cmd_update($input, $output)
@@ -129,6 +130,13 @@ class AccountMgr extends RegisterMgr
         $original = clone($oUser);
         $oUser->setFrom($input->user);
         $oUser->last_updated = SGL_Date::getTime();
+        $oUser->has_branch = (isset($input->user->has_branch)) ? 1 : 0;
+        $oUser->telephone_1 = str_replace(' ', '', $input->user->telephone_1);
+        $oUser->telephone_2 = str_replace(' ', '', $input->user->telephone_2);
+        $oUser->fax = str_replace(' ', '', $input->user->fax);
+        $oUser->mobile = str_replace(' ', '', $input->user->mobile);
+        
+        //echo '<pre>';print_r($oUser);echo '</pre>';die;
         $success = $oUser->update($original);
 
         if ($success !== false) {
@@ -144,6 +152,8 @@ class AccountMgr extends RegisterMgr
         SGL::logMessage(null, PEAR_LOG_DEBUG);
 
         $output->template = 'account.html';
+        $output->masterTemplate = 'masterLeftCol.html';
+        $output->masterLayout = 'layout-navtop-2col_localleft.css';
         switch (SGL_Session::getRoleId())
         {
         	case SGL_INSTITUTIONAL:
@@ -157,10 +167,30 @@ class AccountMgr extends RegisterMgr
         		$output->role = SGL_INDIVIDUAL;
         		break;
         }
-        $output->pageTitle = 'My Profile';
-        $oUser = DB_DataObject::factory($this->conf['table']['user']);
-        $oUser->get(SGL_Session::getUid());
+        
+        $userId = SGL_Session::getUid();
+    	$query = "
+    			SELECT usr.*, c.title AS city, v.title AS village, r.title AS region
+    			FROM {$this->conf['table']['user']} AS usr
+    			LEFT JOIN {$this->conf['table']['city']} AS c
+    			ON c.city_id = usr.city_id
+    			LEFT JOIN {$this->conf['table']['region']} AS r
+    			ON r.region_id = usr.region_id
+    			LEFT JOIN {$this->conf['table']['village']} AS v
+    			ON v.village_id = usr.village_id
+    			WHERE usr.usr_id = $userId
+    		";
+    	$oUser = $this->dbh->getRow($query);
+    	
+    	$oUser->telephone_1 = substr_replace(substr_replace($oUser->telephone_1, ' ', 6, 0), ' ', 3, 0) ;
+    	$oUser->telephone_2 = substr_replace(substr_replace($oUser->telephone_2, ' ', 6, 0), ' ', 3, 0) ;
+    	$oUser->fax = substr_replace(substr_replace($oUser->fax, ' ', 6, 0), ' ', 3, 0) ;
+    	$oUser->mobile = substr_replace(substr_replace($oUser->mobile, ' ', 6, 0), ' ', 3, 0) ;
+    	
         $output->user = $oUser;
+        $output->region = $oUser->region;
+        
+        //echo '<pre>';print_r($oUser);echo '</pre>';die;
     }
 
     function _cmd_summary($input, $output)

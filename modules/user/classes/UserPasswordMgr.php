@@ -171,7 +171,7 @@ class User_UpdateUserPassword extends SGL_Observable
         $this->conf = $this->input->getConfig();
         $oUser = DB_DataObject::factory($this->conf['table']['user']);
         $oUser->get(SGL_Session::getUid());
-        $oUser->passwd = md5($this->input->password);
+        $oUser->passwd = $oUser->temp_pass = md5($this->input->password);
         $success = $oUser->update();
 
         //  make user object available to observers

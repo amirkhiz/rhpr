@@ -132,8 +132,8 @@ hr {
     display: none;
 }
 div.hr {
-    margin: 1em auto;
+    margin: 5px auto;
     height: 1px;
-    background-color: #999;
+    background-color: #eaeaea;
     line-height: 1px;
 }

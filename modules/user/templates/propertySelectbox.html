@@ -1,0 +1,6 @@
+<label class="col-lg-5" for="user_{title}-id">{translate(upTitle)}</label>
+<label class="col-lg-1" for="user_{title}-id">:</label>
+<select class="validate[required]" name="user[{title}_id]" id="user_{title}-id">
+	<option>Select {translate(upTitle)}</option>
+    {generateSelect(aOptions):h}
+</select>

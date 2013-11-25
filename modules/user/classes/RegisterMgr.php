@@ -297,10 +297,19 @@ class RegisterMgr extends SGL_Manager
     
     function _editDisplay($input, $output)
     {
+    	$city = DB_DataObject::factory($this->conf['table']['city']);
+    	$city->whereAdd('status = 1');
+    	$city->find();
+    	$aCity = array();
+    	while ($city->fetch())
+    	{
+    		$aCity[$city->city_id] = $city->title;
+    	}
+    	$output->aCity 		= $aCity;
+    	
+    	//echo '<pre>';print_r($usrInfo);echo '</pre>';die;
+    	
     	$output->aCats 		= array('cat1', 'cat2', 'cat3');
-    	$output->aVills 	= array('vill1', 'vill2', 'vill3');
-    	$output->aCity 		= array('city1', 'city2', 'city3');
-    	$output->aRegion 	= array('region1', 'region2', 'region3');
     }
 }
 
@@ -323,12 +332,16 @@ class User_AddUser extends SGL_Observable
         $defaultRoleId = $this->conf['RegisterMgr']['defaultRoleId'];
         $defaultOrgId  = $this->conf['RegisterMgr']['defaultOrgId'];
 
+        require_once 'Text/Password.php';
+        $oPassword = new Text_Password();
+        $passwd = $oPassword->create(10, 'unpronounceable', '');
+        
         $da =  UserDAO::singleton();
         $oUser = $da->getUserById();
         $oUser->setFrom($this->input->user);
-        $oUser->passwdClear = $pass = $this->generatePassword();
-        $oUser->passwd = md5($pass);
-        $oUser->temp_pass = $pass;
+        $oUser->passwdClear = $passwd;
+        $oUser->passwd = md5($passwd);
+        $oUser->temp_pass = $passwd;
 
         if ($this->conf['RegisterMgr']['autoEnable']) {
             $oUser->is_acct_active = 1;
@@ -387,8 +400,6 @@ class User_AddUser extends SGL_Observable
     	$da =  UserDAO::singleton();
     	$oUser = $da->getUserById();
     	$oUser->setFrom($this->input->user);
-    	$oUser->passwdClear = $pass = $this->generatePassword();
-    	$oUser->passwd = md5($pass);
     
     	if ($this->conf['RegisterMgr']['autoEnable']) {
     		$oUser->is_acct_active = 1;
@@ -401,11 +412,6 @@ class User_AddUser extends SGL_Observable
     		$input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
     		$this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
     		$oUser->image = $input->aImage['name'];
-    	}
-    	if(isset($input->aLogo['name']) && $input->aLogo['name'] != "") {
-    		$input->aLogo['name'] = $this->cImage->generateUniqueFileName($input->aLogo['name']);
-    		$this->cImage->uploadImage($input->aLogo['name'], $input->aLogo['tmp_name']);
-    		$oUser->logo = $input->aLogo['name'];
     	}
     
     	$success = $da->addUser($oUser);

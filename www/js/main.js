@@ -1,6 +1,48 @@
 (function($){
 $(document).ready(function() {
 	
+	$("#user_city-id").change(function(){
+		var cityId = $(this).val();
+		var ajaxurl = "http://localhost/rhpr/www/userAjax/ajax.php";
+		
+		//console.log(ajaxurl); return false;
+		$.ajax({
+			url: ajaxurl,
+			cache: false,
+            type: 'POST',
+			data: {'frmOpt':cityId,'frmTitle':'region'},
+			success: function(data){
+				//console.log(data);
+				$("#regionList").html(data);
+			},
+			error: function(){
+				console.log('Error in region List');
+			}
+		});
+		
+	});
+	
+	$(document).on("change", "#user_region-id", function(){
+		var regionId = $(this).val();
+		var ajaxurl = "http://localhost/rhpr/www/userAjax/ajax.php";
+		
+		//console.log(ajaxurl); return false;
+		$.ajax({
+			url: ajaxurl,
+			cache: false,
+            type: 'POST',
+			data: {'frmOpt':regionId,'frmTitle':'village'},
+			success: function(data){
+				//console.log(data);
+				$("#villageList").html(data);
+			},
+			error: function(){
+				console.log('Error in region List');
+			}
+		});
+		
+	});
+	
 	$("#form-group").validationEngine();
 	$(".chosen").chosen();
 	
