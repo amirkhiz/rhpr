@@ -1,0 +1,52 @@
+<div class="message">{msgGet():h}</div>
+<ol class="breadcrumb">
+	<li>
+		<a href="{webRoot}">{translate(#Home#)}</a>
+	</li>
+	<li>
+		<strong>{user.name}</strong>
+	</li>
+</ol>
+<div class="hr"></div>
+{if:user.logo}
+<div class="profileLogo">
+	<img src="{webRoot}/images/users/{user.logo}" width="333"/>
+</div>
+{end:}
+
+<div class="profileDetail">
+    <dl>
+        <dt class="col-lg-5">{translate(#Company Name#)}</dt>
+        <dd class="col-lg-5">{user.name}&nbsp;</dd>
+        <dt class="col-lg-5">{translate(#Category#)}</dt>
+        <dd class="col-lg-5">{user.category_id}&nbsp;</dd>
+		<dt class="col-lg-5">{translate(#Address#)}</dt>
+        <dd class="col-lg-5">{user.addr}&nbsp;,&nbsp;{region}&nbsp;/&nbsp;{user.city}/</dd>
+		<dt class="col-lg-5">{translate(#Village#)}&nbsp;</dt>
+        <dd class="col-lg-5">{user.village}</dd>
+		<dt class="col-lg-5">{translate(#Contact Person#)}</dt>
+        <dd class="col-lg-5">{user.contact_person_1}</dd>
+		<dt class="col-lg-5">{translate(#Contact Person 2#)}</dt>
+        <dd class="col-lg-5">{user.contact_person_2}</dd>
+        <dt class="col-lg-5">{translate(#Telephone#)}</dt>
+        <dd class="col-lg-5">0&nbsp;{user.telephone_1}&nbsp;</dd>
+		<dt class="col-lg-5">{translate(#Telephone 2#)}</dt>
+        <dd class="col-lg-5">0&nbsp;{user.telephone_2}&nbsp;</dd>
+		<dt class="col-lg-5">{translate(#Fax#)}</dt>
+        <dd class="col-lg-5">0&nbsp;{user.fax}&nbsp;</dd>
+        <dt class="col-lg-5">{translate(#Mobile#)}</dt>
+        <dd class="col-lg-5">0&nbsp;{user.mobile}&nbsp;</dd>
+    </dl>
+</div>
+
+<div class="clear"><!-- CLear & Fix --></div>
+
+<div class="profileContacts">
+	<a href="http://facebook.com/{user.facebook}" target="_blank" class="profileIcons iconFacebook"></a>
+	<a href="http://twitter.com/{user.twitter}" target="_blank" class="profileIcons iconTwitter"></a>
+	<a href="{user.email}" target="_blank" class="profileIcons iconMail"></a>
+	<div class="g-plusone" data-size="larg" data-annotation="none"></div>
+</div>
+<div>
+    <a href="{makeUrl(#edit#,#account#,#user#)}">{translate(#Edit#)}</a>
+</div>
