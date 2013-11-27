@@ -1,9 +1,8 @@
 <div id="block-logout">
-    <p>
-        <strong>{translate(#user#)}:</strong>
-        <em>{loggedOnUser}</em>
-    </p>
-    <div class="registerBtn">
+	<div class="profileBtn blueBtn">
+	    <a href="{makeUrl(##,#company#,#company#)}">{translate(#Profile#)}</a>
+	</div>
+	<div class="logoutBtn redBtn">
         <a href="{makeUrl(#logout#,#login#,#user#)}">{translate(#logout#,#ucfirst#)}</a>
     </div>
 </div>

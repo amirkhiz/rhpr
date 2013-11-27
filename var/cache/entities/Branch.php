@@ -11,6 +11,8 @@ class DataObjects_Branch extends DB_DataObject
 
     public $__table = 'branch';              // table name
     public $branch_id;                       // int(11)  not_null primary_key
+    public $usr_id;                          // int(11)  not_null
+    public $company_id;                      // int(11)  not_null
     public $village_id;                      // int(11)  not_null
     public $city_id;                         // int(11)  not_null
     public $country_id;                      // int(11)  not_null

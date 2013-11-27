@@ -10,12 +10,12 @@
 
 div#content {
     position: relative;
-    width: 1000px;
+    width: 980px;
 	margin: auto;
 }
 div#main {
     float: right;
-    width: 790px;
+    width: 775px;
     display: inline;
 
 }

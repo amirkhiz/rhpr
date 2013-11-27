@@ -598,7 +598,10 @@ div.block {
 	.regBox {
 		float: right;
 	}
-		.regBox a#LoginBtn, .regBox a#registerBtn {
+		.logoutBtn {
+			margin-top: 5px;
+		}
+		.regBox a.logBtn, .regBox a#registerBtn {
 			padding: 12px 13px;
 		}
 		.regBox a {
@@ -663,6 +666,12 @@ div.block {
 			color: #ccc;
 			background-color: #5b5b5b;
 		}
+		
+		.profileBtn {
+		}
+			.profileBtn a {
+				color: #fff;	
+			}
 
 /* Slider Block */
 #topSlider {
@@ -783,7 +792,13 @@ div#leftMenu {
 		margin-top: 10px;
 		overflow: hidden;
 	}
-	
+
+.companyHead {
+	width: 30%;
+	margin: auto;
+	margin-bottom: 5px;
+}
+
 .registerHead {
 	height: 40px;
 	overflow: hidden;
@@ -976,7 +991,7 @@ div#leftMenu {
 	}
 	
 /* Login Block */
-#login {
+.logBox {
 	background-color: #fff;
 	position: absolute;
 	top: 137px;
@@ -988,18 +1003,18 @@ div#leftMenu {
 	padding: 5px;
 	text-align: center;
 }
-	#login .block {
+	.logBox .block {
 		margin: 0;
 		padding: 0;
 	}
-		#login .block .content {
+		.logBox .block .content {
 			margin: 0;
 			padding: 0;
 		}
-			#login .block .content p {
+			.logBox .block .content p {
 				text-align: center;
 			}
-	#login .loginBtn {
+	.logBox .loginBtn {
 		background: url(<?php echo $baseUrl;?>/images/bg/loginBtn.jpg) repeat-x center;
 		width: 100%;
 		height: 28px;
@@ -1012,7 +1027,7 @@ div#leftMenu {
 		-webkit-transition: all 1s; /* Safari */
 	}
 	
-	#login .registerBtn {
+	.logBox .registerBtn {
 		background: url(<?php echo $baseUrl;?>/images/bg/registerBtn2.jpg) repeat-x center;
 		width: 100%;
 		height: 29px;
@@ -1027,7 +1042,7 @@ div#leftMenu {
 		-webkit-transition: all 1s; /* Safari */
 	}
 	
-	#login .forgetPassword {
+	.logBox .forgetPassword {
 		color: #000;
 		text-align: center;
 	}
@@ -1056,8 +1071,7 @@ div#leftMenu {
 /* FooterAds Style */
 #footerAds {
 	width: 980px;
-	margin: auto;
-	margin-bottom: 15px;
+	margin: 15px auto;
 }
 #footerFix {
 	width: 170px;
@@ -1114,6 +1128,13 @@ div#leftMenu {
 }
 
 /* Institutional Profile Style */
+.profilePage {
+	position: relative;
+}
+.profilePart{
+	margin: 5px 0;
+	overflow: hidden;
+}
 .profileLogo {
 	float: left;
 	border: 1px solid #eaeaea;
@@ -1123,7 +1144,7 @@ div#leftMenu {
 }
 .profileDetail {
 	float: left;
-	width: 453px;
+	width: 440px;
 }
 	.profileDetail dl dt, .profileDetail dl dd {
 		margin-bottom: 15px;
@@ -1131,13 +1152,200 @@ div#leftMenu {
 
 .profileContacts {
 	height: 25px;
+	margin-top: 10px;
 }
 	.profileContacts .profileIcons {
-		width: 25px;
-		height: 25px;
+		width: 22px;
+		height: 22px;
 		float: left;
+		margin-left: 5px;
 	}
 	.profileContacts .iconMail {
 		background: url(<?php echo $baseUrl?>/images/bg/mail.png) no-repeat center;
 		margin-right: 2px;
+		width: 25px;
 	}
+	.profileContacts .googlePlusOne {
+		margin-left: 5px;
+		width: 40px;
+	}
+	.profileContacts .profileSite {
+		font-weight: bold;
+		font-size: 16px;
+		text-decoration: none;
+		color: #000;
+		margin-left: 20px;
+	}
+
+.profileAction {
+	
+}
+	.profileAction .profileEditBtn {
+		width: 110px;
+		margin-top: 20px;
+		color: #fff;
+		display: inline-block;
+	}
+	.profileAction .profileAddBranchBtn {
+		width: 110px;
+		margin-top: 20px;
+		color: #fff;
+		display: inline-block;
+	}
+	
+.profileKeywords {
+	list-style: none;
+	width: 335px;
+	float: left;
+}
+	.profileKeywords li {
+		float: left;
+		margin: 0 5px;
+		border-radius: 3px;
+	}
+		.profileKeywords li a {
+			color: #666;
+			padding: 0 10px;
+			font-weight: bold;
+		}
+		.profileKeywords li a:hover {
+			text-decoration: none;
+		}
+
+.profileBranch {
+	width: 425px;
+	float: right;
+}
+	.profileBranch button {
+		height: 28px;
+		color: #000;
+		font-weight: bold;
+		display: block;
+		width: 100%;
+		position: relative;
+		text-align: left;
+		z-index: 6;
+	}
+	.profileBranch button:hover {
+		text-decoration: none;
+	}
+	.profileBranch button:after {
+		position: absolute;
+		right: 10px;
+		top: 0;
+		content:'>';
+	}
+.profileBranchBox {
+	border: 1px solid #eaeaea;
+	position: absolute;
+	top: 462px;
+	right: 0;
+	width:425px;
+	padding: 10x;
+	background-color: #fff;
+	overflow-y: scroll;
+	opacity: 0;
+	height: 0;
+	display: none;
+	z-index: 5;
+	padding: 10px;
+}
+	.profileBranchBox h5 {
+		border-bottom: 1px solid #000;
+		font-weight: bold;
+		font-size: 17px;
+		padding-bottom: 5px;
+	}
+	
+.profileHistory {
+	width: 424px;
+	float: right;
+	margin-top: 10px;
+	padding: 5px;
+}
+
+/* button Styles */
+.redBtn {
+	background: url(<?php echo $baseUrl;?>/images/bg/registerBtn2.jpg) repeat-x center;
+	height: 29px;
+	line-height: 29px;
+	text-align: center;
+	border-radius: 3px;
+	border: none;
+	color: #fff;
+	font-weight: bolder;
+	transition: all 2s;
+	-webkit-transition: all 1s; /* Safari */
+}
+a.redBtn {
+	display: block;
+	color: #fff;
+}
+
+.greyBtn {
+	background: url(<?php echo $baseUrl;?>/images/bg/registerBtn.jpg) repeat-x center;
+	height: 29px;
+	line-height: 29px;
+	text-align: center;
+	border-radius: 3px;
+	border: none;
+	color: #fff;
+	font-weight: bolder;
+	transition: all 2s;
+	-webkit-transition: all 1s; /* Safari */
+}
+a.greyBtn {
+	display: block;
+	color: #fff;
+}
+
+.blueBtn {
+	background: url(<?php echo $baseUrl;?>/images/bg/searchBtnBack.jpg) repeat-x center;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+	border-radius: 3px;
+	border: none;
+	color: #fff;
+	font-weight: bolder;
+	transition: all 2s;
+	-webkit-transition: all 1s; /* Safari */
+}
+a.blueBtn {
+	display: block;
+	color: #fff;
+}
+
+.grey2dBtn {
+	background-color: #eee;
+	height: 28px;
+	line-height: 28px;
+	color: #000;
+	border: 1px solid #aaa;
+	transition: all 2s;
+	-webkit-transition: all 1s; /* Safari */
+}
+.grey2dBtn:hover {
+	background-color: #ccc;
+}
+a.grey2dBtn {
+	display: block;
+	color: #000;
+}
+
+/* Banch Form Style */
+.branchHead {
+	width: 30%;
+	margin: auto;
+	margin-bottom: 5px;
+}
+.branchForm {
+	
+}
+	.submitAct, .cancelAct {
+		display: inline-block;
+	}
+		.submitAct input, .cancelAct a {
+			width: 100px;
+			text-decoration: none;
+		}

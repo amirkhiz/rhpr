@@ -42,8 +42,6 @@ require_once SGL_MOD_DIR . '/user/classes/RegisterMgr.php';
 require_once SGL_MOD_DIR  . '/default/classes/DefaultDAO.php';
 require_once SGL_MOD_DIR . '/user/classes/UserDAO.php';
 require_once SGL_CORE_DIR . '/Delegator.php';
-include_once SGL_MOD_DIR  . '/user/classes/Image.php';
-include_once SGL_CORE_DIR . '/Image.php';
 
 require_once 'Validate.php';
 
@@ -57,7 +55,6 @@ require_once 'Validate.php';
  */
 class UserMgr extends RegisterMgr
 {
-	var $cImage;
 	
     function __construct()
     {
@@ -118,8 +115,6 @@ class UserMgr extends RegisterMgr
         $input->aImage 		= $req->get('fImage');
         $input->aLogo 		= $req->get('fLogo');
 
-        $this->cImage = Image::singleton();
-        
         // This will tell HTML_Flexy which key is used to sort data
         $input->{ 'sort_' . $input->sortBy } = true;
 
@@ -213,17 +208,6 @@ class UserMgr extends RegisterMgr
         $oUser->date_created = $oUser->last_updated = SGL_Date::getTime();
         $oUser->created_by = $oUser->updated_by = SGL_Session::getUid();
         
-        if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
-        	$input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
-        	$this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
-        	$oUser->image = $input->aImage['name'];
-        }
-        if(isset($input->aLogo['name']) && $input->aLogo['name'] != "") {
-        	$input->aLogo['name'] = $this->cImage->generateUniqueFileName($input->aLogo['name']);
-        	$this->cImage->uploadImage($input->aLogo['name'], $input->aLogo['tmp_name']);
-        	$oUser->logo = $input->aLogo['name'];
-        }
-        
         $success = $this->da->addUser($oUser);
 
         //  check for errors
@@ -255,17 +239,6 @@ class UserMgr extends RegisterMgr
         $oUser->setFrom($input->user);
         $oUser->last_updated = SGL_Date::getTime();
         $oUser->updated_by = SGL_Session::getUid();
-        
-        if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
-        	$input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
-        	$this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
-        	$oUser->image = $input->aImage['name'];
-        }
-        if(isset($input->aLogo['name']) && $input->aLogo['name'] != "") {
-        	$input->aLogo['name'] = $this->cImage->generateUniqueFileName($input->aLogo['name']);
-        	$this->cImage->uploadImage($input->aLogo['name'], $input->aLogo['tmp_name']);
-        	$oUser->logo = $input->aLogo['name'];
-        }
         
         $success = $this->da->updateUser($oUser, $input->user->role_id_orig,
             $input->user->organisation_id_orig);

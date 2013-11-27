@@ -16,17 +16,8 @@
 				</form>
 			</div>
 			<div class="regBox">
-				<div class="loginBlock">
-					<a href="#" id="LoginBtn">{translate(#Login#)}</a>
-					<div id="login" style="opacity: 0; width: 0; height: 0;">
-						<flexy:include src="blocksLogin.html" />
-					</div>
-				</div>
-				<div class="regBtn">
-					<div class="registerBtn">
-				        <a id="registerBtn" href="{makeUrl(##,#register#,#user#)}">{translate(#Register#)}</a>
-				    </div>
-				</div>
+				<flexy:include src="blocksLogin.html" />
+				<flexy:include src="blocksLogout.html" />
 				<!--
 				<div class="orgRegBtn">
 					<a href="#" id="kurumsalLoginBtn">{translate(#Institutional#)}</a>
