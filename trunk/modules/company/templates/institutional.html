@@ -1,0 +1,196 @@
+<div id="ajaxMessage" class="message">{msgGet():h}</div>
+{if:isAdd}
+<div id="content-header" class="registerHead">
+	<a id="individualBtn" class="deactiveBtn" href="{makeUrl(#add#,#company#,#company#)}regGrp/{individual}">{translate(#Individual#)}</a>
+	<a id="institutionalBtn" class="activeBtn" href="{makeUrl(#add#,#company#,#company#)}regGrp/{institutional}">{translate(#Institutional#)}</a>
+</div>
+{else:}
+<div id="content-header" class="companyHead redBtn">
+	{translate(#Institutional#)}
+</div>
+{end:}
+<div class="registerForm">
+	<form id="form-group" method="post" action="" flexy:ignore enctype="multipart/form-data">
+	    <fieldset class="hide">
+			<input type="hidden" name="role"value="{role}" />
+	    {if:isAdd}
+	        <input type="hidden" name="action"value="insert" />
+	        {if:redir}
+	        <input type="hidden" name="redir" value="{redir}" />
+	        {end:}
+	    {else:}
+	        <input type="hidden" name="action" value="update" />
+	        <input type="hidden" name="company[company_id]" value="{company.company_id}" />
+	        <input type="hidden" name="company[email_orig]"
+	               value="{company.email_orig}" />
+	    {end:}
+		</fieldset>
+	
+		<div class="form-group">
+			<label class="col-lg-5" for="company_logo">{translate(#Logo#)}</label>
+			<label class="col-lg-1" for="company_logo">:</label>
+            <input id="company_logo" class="text col-lg-3" type="file"
+                   name="fLogo" value="{company.logo}" />
+        </div>
+	    <div class="form-group">
+	        <label class="col-lg-5" for="company_name">{translate(#Company Name#)}</label>
+			<label class="col-lg-1" for="company_name">:</label>
+            <input id="company_name" class="validate[required] text" type="text"
+                   name="company[name]" value="{company.name}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_category-id">{translate(#Category#)}</label>
+			<label class="col-lg-1" for="company_category-id">:</label>
+			<select id="company_category-id" class="validate[required]" name="company[category_id]">
+				{generateSelect(aCats,company.category_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_contact-person-1">{translate(#Contact Person#)}</label>
+			<label class="col-lg-1" for="company_contact-person-1">:</label>
+            <input id="company_contact-person-1" class="text" type="text"
+                   name="company[contact_person_1]" value="{company.contact_person_1}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_contact-person-2">{translate(#Contact Person 2#)}</label>
+			<label class="col-lg-1" for="company_contact-person-2">:</label>
+            <input id="company_contact-person-2" class="text" type="text"
+                   name="company[contact_person_2]" value="{company.contact_person_2}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_addr">{translate(#Address#)}</label>
+			<label class="col-lg-1" for="company_addr">:</label>
+            <input id="company_addr" class="validate[required] text" type="text"
+                   name="company[addr]" value="{company.addr}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_city-id">{translate(#City#)}</label>
+			<label class="col-lg-1" for="company_city-id">:</label>
+			<select id="company_city-id" class="validate[required] citySelect" data="company" name="company[city_id]">
+				<option>{translate(#Select City#)}</option>
+				{generateSelect(aCity,company.city_id):h}
+			</select>
+	    </div>
+		<div class="form-group" id="regionList">
+	        <label class="col-lg-5" for="company_region-id">{translate(#Region#)}</label>
+			<label class="col-lg-1" for="company_region-id">:</label>
+			<select id="company_region-id" class="validate[required] regionSelect" data="company" name="company[region_id]">
+				<option>{translate(#Select Region#)}</option>
+				{if:!isAdd}
+					{generateSelect(aRegion,company.region_id):h}
+				{end:}
+			</select>
+	    </div>
+		<div class="form-group" id="villageList">
+	        <label class="col-lg-5" for="company_village-id">{translate(#Village#)}</label>
+			<label class="col-lg-1" for="company_village-id">:</label>
+			<select id="company_village-id" class="validate[required]" name="company[village_id]">
+				<option>{translate(#Select Village#)}</option>
+				{if:!isAdd}
+					{generateSelect(aVillage,company.village_id):h}
+				{end:}
+			</select>
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_telephone-1">{translate(#Telephone#)}</label>
+			<label class="col-lg-1" for="company_telephone-1">:</label>
+            <input id="company_telephone-1" class="validate[required,minSize[11]] text" type="text"
+                   name="company[telephone_1]" value="{company.telephone_1}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_telephone-2">{translate(#Telephone 2#)}</label>
+			<label class="col-lg-1" for="company_telephone-2">:</label>
+            <input id="company_telephone-2" class="validate[minSize[11]] text" type="text"
+                   name="company[telephone_2]" value="{company.telephone_2}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_fax">{translate(#Fax#)}</label>
+			<label class="col-lg-1" for="company_fax">:</label>
+            <input id="company_fax" class="validate[minSize[11]] text" type="text"
+                   name="company[fax]" value="{company.fax}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_mobile">{translate(#Mobile#)}</label>
+			<label class="col-lg-1" for="company_mobile">:</label>
+            <input id="company_mobile" class="validate[required,minSize[11]] text" type="text"
+                   name="company[mobile]" value="{company.mobile}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_site-name">{translate(#Web Site#)}</label>
+			<label class="col-lg-1" for="company_site-name">:</label>
+            <input id="company_site-name" class="validate[custom[url]] text" type="text"
+                   name="company[site_name]" value="{company.site_name}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_facebook">{translate(#Facebook#)}</label>
+			<label class="col-lg-1" for="company_facebook">:</label>
+            <input id="company_facebook" class="text" type="text"
+                   name="company[facebook]" value="{company.facebook}" />
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_twitter">{translate(#Twitter#)}</label>
+			<label class="col-lg-1" for="company_twitter">:</label>
+            <input id="company_twitter" class="text" type="text"
+                   name="company[twitter]" value="{company.twitter}" />
+	    </div>
+	    <div class="form-group">
+	        <label class="col-lg-5" for="company_email">{translate(#Email#)}</label>
+			<label class="col-lg-1" for="company_email">:</label>
+            <input id="company_email" class="validate[required,custom[email]] text" type="text"
+                   name="company[email]" value="{company.email}" />
+			<p class="error">{error[email]}</p>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_email-2">{translate(#Email 2#)}</label>
+			<label class="col-lg-1" for="company_email-2">:</label>
+            <input id="company_email-2" class="validate[custom[email]] text" type="text"
+                   name="company[email_2]" value="{company.email_2}" />
+	    </div>
+	    <div class="form-group">
+	        <label class="col-lg-5" for="company_keywords">{translate(#Keywords#)}</label>
+			<label class="col-lg-1" for="company_keywords">:</label>
+            <textarea id="company_keywords" class="text"
+                   name="company[keywords]">{company.keywords}</textarea>
+			<p class="help-block">{translate(#Example keywords seprated with comma(,)#)}.</p>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="company_history">{translate(#Introduction#)}</label>
+			<label class="col-lg-1" for="company_history">:</label>
+            <textarea id="company_history" class="text"
+                   name="company[history]">{company.history}</textarea>
+	    </div>
+		<div class="form-group">
+			<label class="col-lg-5" for="company_image">{translate(#Image#)}</label>
+			<label class="col-lg-1" for="company_image">:</label>
+            <div>
+                <input id="company_image" class="text col-lg-3" type="file"
+                       name="fImage" value="{company.image}" />
+            </div>
+        </div>
+		<div class="form-group">
+			<label class="col-lg-5" for="company_has-branch">{translate(#Do you have Branchs?#)}</label>
+			<label class="col-lg-1" for="company_has-branch">:</label>
+            <div>
+                <input id="company_has-branch" class="" type="checkbox"
+                       name="company[has_branch]" flexy:raw="{hasBranch}" />
+            </div>
+        </div>
+		
+		<div class="form-group submitAct">
+	    	{if:isAdd}
+	        <input class="redBtn" type="submit" name="submitted"
+	               value="{translate(#Register#)}" />
+			{else:}
+			<input class="redBtn" type="submit" name="submitted"
+	               value="{translate(#Save#)}" />
+			{end:}
+	    </div>
+	
+	    <div class="form-group cancelAct">
+	        <a href="{makeUrl(#viewProfile#,#account#,#company#)}" class="greyBtn">
+				{translate(#Cancel#)}
+			</a>
+	    </div>
+	</form>
+</div>

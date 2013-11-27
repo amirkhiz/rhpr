@@ -1,0 +1,122 @@
+<div id="ajaxMessage" class="message">{msgGet():h}</div>
+<div id="content-header" class="branchHead redBtn">
+	{pageTitle}
+</div>
+<div class="branchForm">
+	<form id="form-group" method="post" action="" flexy:ignore enctype="multipart/form-data">
+	    <fieldset class="hide">
+			<input type="hidden" name="branch[company_id]" value="{companyId}" />
+	    {if:isAdd}
+	        <input type="hidden" name="action"value="insert" />
+	        {if:redir}
+	        <input type="hidden" name="redir" value="{redir}" />
+	        {end:}
+	    {else:}
+	        <input type="hidden" name="action" value="update" />
+	        <input type="hidden" name="branch[branch_id]" value="{branch.branch_id}" />
+	    {end:}
+		</fieldset>
+	
+		<div class="form-group">
+        <label class="col-lg-5" for="branch_name">{translate(#Company Name#)}</label>
+		<label class="col-lg-1" for="branch_name">:</label>
+        <input id="branch_name" class="validate[required] text" type="text"
+               name="branch[name]" value="{branch.name}"/>
+    </div>
+	<div class="form-group">
+	        <label class="col-lg-5" for="branch_contact-person-1">{translate(#Contact Person#)}</label>
+			<label class="col-lg-1" for="branch_contact-person-1">:</label>
+            <input id="branch_contact-person-1" class="text" type="text"
+                   name="branch[contact_person_1]" value="{branch.contact_person_1}"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_contact-person-2">{translate(#Contact Person 2#)}</label>
+			<label class="col-lg-1" for="branch_contact-person-2">:</label>
+            <input id="branch_contact-person-2" class="text" type="text"
+                   name="branch[contact_person_2]" value="{branch.contact_person_2}"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_addr">{translate(#Address#)}</label>
+			<label class="col-lg-1" for="branch_addr">:</label>
+            <input id="branch_addr" class="validate[required] text" type="text"
+                   name="branch[addr]" value="{branch.addr}"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_city-id">{translate(#City#)}</label>
+			<label class="col-lg-1" for="branch_city-id">:</label>
+			<select id="branch_city-id" class="validate[required] citySelect" data="branch" name="branch[city_id]">
+				<option>{translate(#Select City#)}</option>
+				{generateSelect(aCity,branch.city_id):h}
+			</select>
+	    </div>
+		<div class="form-group" id="regionList">
+	        <label class="col-lg-5" for="branch_region-id">{translate(#Region#)}</label>
+			<label class="col-lg-1" for="branch_region-id">:</label>
+			<select id="branch_region-id" class="validate[required] regionSelect" data="branch" name="branch[region_id]">
+				<option>{translate(#Select Region#)}</option>
+				{generateSelect(aRegion,branch.region_id):h}
+			</select>
+	    </div>
+		<div class="form-group" id="villageList">
+	        <label class="col-lg-5" for="branch_village-id">{translate(#Village#)}</label>
+			<label class="col-lg-1" for="branch_village-id">:</label>
+			<select id="branch_village-id" class="validate[required]" name="branch[village_id]">
+				<option>{translate(#Select Village#)}</option>
+				{generateSelect(aVillage,branch.village_id):h}
+			</select>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_telephone-1">{translate(#Telephone#)}</label>
+			<label class="col-lg-1" for="branch_telephone-1">:</label>
+            <input id="branch_telephone-1" class="validate[required,minSize[11]] text tel" type="text"
+                   name="branch[telephone_1]" value="{branch.telephone_1}"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_telephone-2">{translate(#Telephone 2#)}</label>
+			<label class="col-lg-1" for="branch_telephone-2">:</label>
+            <input id="branch_telephone-2" class="validate[minSize[11]] text tel2" type="text"
+                   name="branch[telephone_2]" value="{branch.telephone_2}"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_fax">{translate(#Fax#)}</label>
+			<label class="col-lg-1" for="branch_fax">:</label>
+            <input id="branch_fax" class="validate[minSize[11]] text fax" type="text"
+                   name="branch[fax]" value="{branch.fax}"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_mobile">{translate(#Mobile#)}</label>
+			<label class="col-lg-1" for="branch_mobile">:</label>
+            <input id="branch_mobile" class="validate[required,minSize[11]] text mobile" type="text"
+                   name="branch[mobile]" value="{branch.mobile}"/>
+	    </div>
+		<div class="form-group">
+	        <label class="col-lg-5" for="branch_history">{translate(#Introduction#)}</label>
+			<label class="col-lg-1" for="branch_history">:</label>
+            <textarea id="branch_history" class="text" name="branch[history]"> {branch.history}"</textarea>
+	    </div>
+		<div class="form-group" style="overflow: hidden;">
+			<label class="col-lg-5" for="branch_image">{translate(#Image#)}</label>
+			<label class="col-lg-1" for="branch_image">:</label>
+            <div>
+                <input id="branch_image" class="text col-lg-3" type="file"
+                       name="fImage"/>
+            </div>
+        </div>
+		
+		<div class="form-group submitAct">
+	    	{if:isAdd}
+	        <input class="redBtn" type="submit" name="submitted"
+	               value="{translate(#Register#)}" />
+			{else:}
+			<input class="redBtn" type="submit" name="submitted"
+	               value="{translate(#Save#)}" />
+			{end:}
+	    </div>
+	
+	    <div class="form-group cancelAct">
+	        <a href="{makeUrl(#viewProfile#,#account#,#company#)}" class="greyBtn">
+				{translate(#Cancel#)}
+			</a>
+	    </div>
+	</form>
+</div>

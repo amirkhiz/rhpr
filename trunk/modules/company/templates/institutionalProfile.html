@@ -1,0 +1,98 @@
+<div class="message">{msgGet():h}</div>
+
+<ol class="breadcrumb">
+	<li>
+		<a href="{webRoot}">{translate(#Home#)}</a>
+	</li>
+	<li>
+		<strong>{company.name}</strong>
+	</li>
+</ol>
+
+<div class="hr"></div>
+
+<div class="profilePage">
+	{if:company.logo}
+	<div class="profileLogo">
+		<img src="{webRoot}/images/company/{company.logo}" width="333"/>
+	</div>
+	{end:}
+	
+	<div class="profileDetail">
+	    <dl>
+	        <dt class="col-lg-5">{translate(#Company Name#)}</dt>
+	        <dd class="col-lg-5">{company.name}&nbsp;</dd>
+	        <dt class="col-lg-5">{translate(#Category#)}</dt>
+	        <dd class="col-lg-5">{company.category_id}&nbsp;</dd>
+			<dt class="col-lg-5">{translate(#Address#)}</dt>
+	        <dd class="col-lg-5">{company.addr}&nbsp;,&nbsp;{company.region}&nbsp;/&nbsp;{company.city}</dd>
+			<dt class="col-lg-5">{translate(#Village#)}&nbsp;</dt>
+	        <dd class="col-lg-5">{company.village}</dd>
+			{if:company.contact_person_1}
+			<dt class="col-lg-5">{translate(#Contact Person#)}</dt>
+	        <dd class="col-lg-5">{company.contact_person_1}</dd>
+			{end:}
+			{if:company.contact_person_2}
+			<dt class="col-lg-5">{translate(#Contact Person 2#)}</dt>
+	        <dd class="col-lg-5">{company.contact_person_2}</dd>
+			{end:}
+	        <dt class="col-lg-5">{translate(#Telephone#)}</dt>
+	        <dd class="col-lg-5">0&nbsp;{company.telephone_1}&nbsp;</dd>
+			{if:company.telephone_2}
+			<dt class="col-lg-5">{translate(#Telephone 2#)}</dt>
+	        <dd class="col-lg-5">0&nbsp;{company.telephone_2}&nbsp;</dd>
+			{end:}
+			{if:company.fax}
+			<dt class="col-lg-5">{translate(#Fax#)}</dt>
+	        <dd class="col-lg-5">0&nbsp;{company.fax}&nbsp;</dd>
+			{end:}
+	        <dt class="col-lg-5">{translate(#Mobile#)}</dt>
+	        <dd class="col-lg-5">0&nbsp;{company.mobile}&nbsp;</dd>
+	    </dl>
+	</div>
+	
+	<div class="clear"><!-- CLear & Fix --></div>
+	
+	<div class="profileContacts">
+		{if:company.facebook}
+		<a href="http://facebook.com/{company.facebook}" target="_blank" class="profileIcons iconFacebook"></a>
+		{end:}
+		{if:company.twitter}
+		<a href="http://twitter.com/{company.twitter}" target="_blank" class="profileIcons iconTwitter"></a>
+		{end:}
+		<div class="profileIcons googlePlusOne">
+			<div class="g-plusone" data-size="larg" data-annotation="none"></div>
+		</div>
+		<a href="mailto:{company.email}" target="_blank" class="profileIcons iconMail"></a>
+		{if:company.site_name}
+		<a class="profileSite" href="{company.site_name}" target="_blank">{company.site_name}</a>
+		{end:}
+	</div>
+	<div class="clear"><!-- CLear & Fix --></div>
+	<div class="profilePart">
+		<ul class="profileKeywords">
+			<li class="grey2dBtn" flexy:foreach="company.keywords,key,value">
+				<a href="#">{value}</a>
+			</li>
+		</ul>
+		{if:company.has_branch}
+		<div class="profileBranch">
+			<button id="profileBranchBtn" class="grey2dBtn" data="{company.company_id}">{translate(#Branchs#)}</button>
+		</div>
+		<div id="profileBranchBox" class="profileBranchBox"><!-- Content --></div>
+		{end:}
+		<div class="profileHistory">
+			<span>{company.history}</span>
+		</div>
+	</div>
+	<div class="clear"><!-- CLear & Fix --></div>
+	
+	<div class="profileAction">
+		{if:isOwner}
+		<a class="greyBtn profileEditBtn" href="{makeUrl(#edit#,#company#,#company#)}">{translate(#Edit Profile#)}</a>
+		{end:}
+		{if:company.has_branch}
+		<a class="redBtn profileAddBranchBtn" href="{makeUrl(#add#,#branch#,#company#)}frmCompanyID/{company.company_id}">{translate(#Add Branchs#)}</a>
+		{end:}
+	</div>
+</div>
