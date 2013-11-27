@@ -44,8 +44,6 @@ require_once SGL_CORE_DIR . '/Observer.php';
 require_once SGL_CORE_DIR . '/Emailer.php';
 require_once 'Validate.php';
 require_once 'DB/DataObject.php';
-include_once SGL_MOD_DIR  . '/user/classes/Image.php';
-include_once SGL_CORE_DIR . '/Image.php';
 
 /**
  * Manages User objects.
@@ -62,10 +60,8 @@ class RegisterMgr extends SGL_Manager
         parent::__construct();
 
         $this->pageTitle    = 'Register';
-        $this->template		= 'individual.html';
+        $this->template		= 'userAdd.html';
         $this->da           =  UserDAO::singleton();
-        $this->institutionalTheme = 'institutional';
-        $this->individualTheme = 'individual';
 
         $this->_aActionsMapping =  array(
             'add'       => array('add'),
@@ -88,13 +84,6 @@ class RegisterMgr extends SGL_Manager
         $input->userID      = $req->get('frmUserID');
         $input->aDelete     = $req->get('frmDelete');
         $input->user        = (object)$req->get('user');
-        $input->regGrp      = $req->get('regGrp');
-        $input->role        = $req->get('role');
-        $input->aImage 		= $req->get('fImage');
-        $input->aLogo 		= $req->get('fLogo');
-        $input->branch      = (object)$req->get('branch');
-        $input->aBranchImg	= $req->get('fBranchImage');
-        
         
         //  get referer details if present
         $input->redir = $req->get('redir');
@@ -190,17 +179,6 @@ class RegisterMgr extends SGL_Manager
             SGL::raiseMsg('Please fill in the indicated fields');
             $input->error = $aErrors;
             $input->template = 'userAdd.html';
-            if (isset($input->regGrp))
-            	switch ($input->regGrp)
-            	{
-            		case SGL_INSTITUTIONAL:
-            			$input->template = $this->institutionalTheme . '.html';
-            			break;
-            		case SGL_INDIVIDUAL:
-            			$input->template = $this->individualTheme . '.html';
-            			break;
-            	}
-            	
             $this->validated = false;
         }
 
@@ -249,32 +227,9 @@ class RegisterMgr extends SGL_Manager
         SGL::logMessage(null, PEAR_LOG_DEBUG);
 
         $output->template = $this->template;
-        $output->role = SGL_INDIVIDUAL;
-        $output->institutional = SGL_INSTITUTIONAL;
-        $output->individual = SGL_INDIVIDUAL;
-        
-        if (isset($input->role))
-        	$output->role = $input->role;
-        if (isset($input->regGrp))
-        {
-           	switch ($input->regGrp)
-            {
-            	case SGL_INSTITUTIONAL:
-            		$output->template = $this->institutionalTheme . '.html';
-            		$output->pageTitle = ucfirst($this->institutionalTheme);
-            		$output->role = SGL_INSTITUTIONAL;
-            		break;
-            	case SGL_INDIVIDUAL:
-            		$output->template = $this->individualTheme . '.html';
-            		$output->pageTitle = ucfirst($this->individualTheme);
-            		$output->role = SGL_INDIVIDUAL;
-            		break;
-            }
-        }
         $output->user = DB_DataObject::factory($this->conf['table']['user']);
         $output->user->password_confirm = (isset($input->user->password_confirm)) ?
             $input->user->password_confirm : '';
-		$this->_editDisplay($input, $output);
     }
 
     function _cmd_insert($input, $output)
@@ -295,32 +250,14 @@ class RegisterMgr extends SGL_Manager
         SGL_HTTP::redirect(array('moduleName' => 'default', 'managerName' => 'default'));
     }
     
-    function _editDisplay($input, $output)
-    {
-    	$city = DB_DataObject::factory($this->conf['table']['city']);
-    	$city->whereAdd('status = 1');
-    	$city->find();
-    	$aCity = array();
-    	while ($city->fetch())
-    	{
-    		$aCity[$city->city_id] = $city->title;
-    	}
-    	$output->aCity 		= $aCity;
-    	
-    	//echo '<pre>';print_r($usrInfo);echo '</pre>';die;
-    	
-    	$output->aCats 		= array('cat1', 'cat2', 'cat3');
-    }
 }
 
 class User_AddUser extends SGL_Observable
 {
-	var $cImage;
     function User_AddUser($input, $output)
     {
         $this->input = $input;
         $this->output = $output;
-        $this->cImage = Image::singleton();
     }
 
     function run()
@@ -341,32 +278,14 @@ class User_AddUser extends SGL_Observable
         $oUser->setFrom($this->input->user);
         $oUser->passwdClear = $passwd;
         $oUser->passwd = md5($passwd);
-        $oUser->temp_pass = $passwd;
 
         if ($this->conf['RegisterMgr']['autoEnable']) {
             $oUser->is_acct_active = 1;
         }
         
-        $oUser->has_branch = (isset($this->input->user->has_branch)) ? 1 : 0;
         $oUser->role_id = (isset($this->input->role)) ? $this->input->role : $defaultRoleId;
         $oUser->organisation_id = $defaultOrgId;
         $oUser->date_created = $oUser->last_updated = SGL_Date::getTime();
-        $oUser->telephone_1 = str_replace(' ', '', $this->input->user->telephone_1);
-        $oUser->telephone_2 = str_replace(' ', '', $this->input->user->telephone_2);
-        $oUser->fax = str_replace(' ', '', $this->input->user->fax);
-        $oUser->mobile = str_replace(' ', '', $this->input->user->mobile);
-        
-        if(isset($this->input->aImage['name']) && $this->input->aImage['name'] != "") {
-        	$this->input->aImage['name'] = $this->cImage->generateUniqueFileName($this->input->aImage['name']);
-        	$this->cImage->uploadImage($this->input->aImage['name'], $this->input->aImage['tmp_name']);
-        	$oUser->image = $this->input->aImage['name'];
-        }
-        if(isset($this->input->aLogo['name']) && $this->input->aLogo['name'] != "") {
-        	$this->input->aLogo['name'] = $this->cImage->generateUniqueFileName($this->input->aLogo['name']);
-        	$this->cImage->uploadImage($this->input->aLogo['name'], $this->input->aLogo['tmp_name']);
-        	$oUser->logo = $this->input->aLogo['name'];
-        }
-        
         $success = $da->addUser($oUser);
 
         //  make user object available to observers
@@ -386,83 +305,5 @@ class User_AddUser extends SGL_Observable
         }
         return $ret;
     }
-    
-    
-    function addBranches()
-    {
-    	SGL::logMessage(null, PEAR_LOG_DEBUG);
-    
-    	//  get default values for new users
-    	$this->conf = $this->input->getConfig();
-    	$defaultRoleId = $this->conf['RegisterMgr']['defaultRoleId'];
-    	$defaultOrgId  = $this->conf['RegisterMgr']['defaultOrgId'];
-    
-    	$da =  UserDAO::singleton();
-    	$oUser = $da->getUserById();
-    	$oUser->setFrom($this->input->user);
-    
-    	if ($this->conf['RegisterMgr']['autoEnable']) {
-    		$oUser->is_acct_active = 1;
-    	}
-    	$oUser->role_id = $defaultRoleId;
-    	$oUser->organisation_id = $defaultOrgId;
-    	$oUser->date_created = $oUser->last_updated = SGL_Date::getTime();
-    
-    	if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
-    		$input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
-    		$this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
-    		$oUser->image = $input->aImage['name'];
-    	}
-    
-    	$success = $da->addUser($oUser);
-    
-    	//  make user object available to observers
-    	$this->oUser = $oUser;
-    
-    	if ($success) {
-    		//  set user id for use in observers
-    		$this->oUser->usr_id = $success;
-    		//  invoke observers
-    		$this->notify();
-    		$ret = $success;
-    		SGL::raiseMsg('user successfully registered', true, SGL_MESSAGE_INFO);
-    	} else {
-    		SGL::raiseError('There was a problem inserting the record',
-    				SGL_ERROR_NOAFFECTEDROWS);
-    		$ret = false;
-    	}
-    	return $ret;
-    }
-	
-    function generatePassword($length=9, $strength=0) {
-    	$vowels = 'aeuy';
-    	$consonants = 'bdghjmnpqrstvz';
-    	if ($strength & 1) {
-    		$consonants .= 'BDGHJLMNPQRSTVWXZ';
-    	}
-    	if ($strength & 2) {
-    		$vowels .= "AEUY";
-    	}
-    	if ($strength & 4) {
-    		$consonants .= '23456789';
-    	}
-    	if ($strength & 8) {
-    		$consonants .= '@#$%';
-    	}
-    
-    	$password = '';
-    	$alt = time() % 2;
-    	for ($i = 0; $i < $length; $i++) {
-    		if ($alt == 1) {
-    			$password .= $consonants[(rand() % strlen($consonants))];
-    			$alt = 0;
-    		} else {
-    			$password .= $vowels[(rand() % strlen($vowels))];
-    			$alt = 1;
-    		}
-    	}
-    	return $password;
-    }
-
 }
 ?>

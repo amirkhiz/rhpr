@@ -1,7 +1,21 @@
-            {foreach:blocksLogin,key,valueObj}
-                <div class="{valueObj.body_class}">
-                    <div class="content">
-                        {valueObj.content:h}
-                    </div>
-                </div>
-            {end:}
+			<div class="loginBlock">
+				{foreach:blocksLogin,key,valueObj}
+				<a href="#" class="logBtn" id="loginBtn">{valueObj.title}</a>
+				{end:}
+				<div id="login" class="logBox" style="opacity: 0; width: 0; height: 0;">
+					{foreach:blocksLogin,key,valueObj}
+		                <div class="{valueObj.body_class}">
+		                    <div class="content">
+		                        {valueObj.content:h}
+		                    </div>
+		                </div>
+		            {end:}
+				</div>
+			</div>
+			{if:blocksLogin}
+			<div class="regBtn">
+				<div class="registerBtn">
+			        <a id="registerBtn" href="{makeUrl(#add#,#company#,#company#)}">{translate(#Register#)}</a>
+			    </div>
+			</div>
+			{end:}

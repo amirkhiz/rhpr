@@ -25,5 +25,6 @@ $aBlocksNames = array(
 	'KurumsalLogin' => 'KurumsalLogin',
 	'BreyselLogin' => 'BreyselLogin',
 	'Login' => 'Login',
+	'Logout' => 'Logout',
     );
 ?>

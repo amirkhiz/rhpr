@@ -1,16 +1,60 @@
 (function($){
 $(document).ready(function() {
 	
-	$("#user_city-id").change(function(){
-		var cityId = $(this).val();
+	var branchsShowClick = true;
+	$('#profileBranchBtn').click(function(){
+		var companyId = $(this).attr('data');
 		var ajaxurl = "http://localhost/rhpr/www/userAjax/ajax.php";
-		
+		var table = $(this).attr('data');
+		var editUrl = makeUrl({module: "company", manager: "branch", action: "edit"});
+
+		//console.log(editUrl); return false;
+		if (branchsShowClick) 
+			$.ajax({
+				url: ajaxurl,
+				cache: false,
+				type: 'POST',
+				data: {
+					'action': 'getBranch',
+					'frmCompanyID': companyId,
+					'frmEdit': editUrl
+				},
+				success: function(data){
+					console.log(data);
+					$("#profileBranchBox").html(data);
+					$("#profileBranchBox").show().animate({
+						height: "377px",
+						top: "0",
+						opacity: 1
+					}, {queue:true, duration: 500});
+				},
+				error: function(){
+					console.log('Error in region List');
+				}
+			});
+		else {
+			$("#profileBranchBox").animate({
+				height: "0",
+				top: "377px",
+				opacity: 0
+			}, {queue:true, duration: 500});
+			//$("#profileBranchBox").fadeOut(1);
+		}
+		branchsShowClick = !branchsShowClick;
+	});
+	
+	$(".citySelect").change(function(){
+		var cityId = $(this).val();
+		//var ajaxurl = makeUrl({module: "company", action: "getAddr"});
+		var ajaxurl = "http://localhost/rhpr/www/userAjax/ajax.php";
+		var table = $(this).attr('data');
+
 		//console.log(ajaxurl); return false;
 		$.ajax({
 			url: ajaxurl,
 			cache: false,
             type: 'POST',
-			data: {'frmOpt':cityId,'frmTitle':'region'},
+			data: {'action':'getAddr', 'frmOpt':cityId,'frmTitle':'region','frmTable':table},
 			success: function(data){
 				//console.log(data);
 				$("#regionList").html(data);
@@ -22,16 +66,17 @@ $(document).ready(function() {
 		
 	});
 	
-	$(document).on("change", "#user_region-id", function(){
+	$(document).on("change", ".regionSelect", function(){
 		var regionId = $(this).val();
 		var ajaxurl = "http://localhost/rhpr/www/userAjax/ajax.php";
+		var table = $(this).attr('data');
 		
 		//console.log(ajaxurl); return false;
 		$.ajax({
 			url: ajaxurl,
 			cache: false,
             type: 'POST',
-			data: {'frmOpt':regionId,'frmTitle':'village'},
+			data: {'action':'getAddr', 'frmOpt':regionId,'frmTitle':'village','frmTable':table},
 			success: function(data){
 				//console.log(data);
 				$("#villageList").html(data);
@@ -46,13 +91,18 @@ $(document).ready(function() {
 	$("#form-group").validationEngine();
 	$(".chosen").chosen();
 	
-	$('#user_mobile').mask('999 999 9999',{placeholder:"9"});
-	$('#user_telephone-1').mask('999 999 9999',{placeholder:"9"});
-	$('#user_telephone-2').mask('999 999 9999',{placeholder:"9"});
-	$('#user_fax').mask('999 999 9999',{placeholder:"9"});
+	$('#company_mobile').mask('999 999 9999',{placeholder:"9"});
+	$('#company_telephone-1').mask('999 999 9999',{placeholder:"9"});
+	$('#company_telephone-2').mask('999 999 9999',{placeholder:" "});
+	$('#company_fax').mask('999 999 9999',{placeholder:" "});
 	
 	$.mask.definitions['~']='[+-a]';
-	$('#user_blood').mask('a~',{placeholder:" "});
+	$('#company_blood').mask('a~',{placeholder:" "});
+	
+	$('.mobile').mask('999 999 9999',{placeholder:"9"});
+	$('.tel').mask('999 999 9999',{placeholder:"9"});
+	$('.tel2').mask('999 999 9999',{placeholder:" "});
+	$('.fax').mask('999 999 9999',{placeholder:" "});
 	
 	// initialise plugin
 	$('#categoryMenu').superfish({
@@ -68,7 +118,7 @@ $(document).ready(function() {
 			
 		var tabs = $( "#tabs" ).tabs();
 			
-		$("#user_brancha").blur(function(){
+		$("#company_brancha").blur(function(){
 			var branchCount = parseInt($(this).val());
 			
 			if (branchCount <= 5)
@@ -105,7 +155,7 @@ $(document).ready(function() {
 			var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
 			tabCounter--;
 			if (tabCounter == 2){
-				$("#user_branch").prop('disabled', false);
+				$("#company_branch").prop('disabled', false);
 			}
 			$( "#" + panelId ).remove();
 			tabs.tabs( "refresh" );
@@ -133,7 +183,7 @@ $(document).ready(function() {
 		});
 		
 		var loginClick = true;
-		$('#LoginBtn').click(function(){
+		$('#loginBtn').click(function(){
 			if (loginClick)
 				$("#login").animate({
 				    width: "180px",
@@ -147,6 +197,23 @@ $(document).ready(function() {
 					opacity: 0
 				  }, 500 );
 			loginClick = !loginClick;
+		});
+		
+		var logoutClick = true;
+		$('#logoutBtn').click(function(){
+			if (logoutClick)
+				$("#logout").animate({
+				    width: "77px",
+					height: "76px",
+					opacity: 1
+				  }, 500 );
+			else
+				$("#logout").animate({
+				    width: "0",
+					height: "0",
+					opacity: 0
+				  }, 500 );
+			logoutClick = !logoutClick;
 		});
 	});
 

@@ -174,7 +174,8 @@ $conf['table']['zcategory'] = 'zcategory';
 $conf['table']['poll'] = 'poll';
 $conf['table']['poll_question'] = 'poll_question';
 $conf['table']['poll_answer'] = 'poll_answer';
-$conf['table']['slider'] = 'slider';
 $conf['table']['ads'] = 'ads';
+$conf['table']['company'] = 'company';
+$conf['table']['branch'] = 'branch';
 $conf['localConfig']['moduleName'] = 'default';
 ?>
