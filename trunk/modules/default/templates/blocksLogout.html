@@ -1,0 +1,14 @@
+			<div class="loginBlock">
+				{foreach:blocksLogout,key,valueObj}
+				<a href="#" class="logBtn" id="logoutBtn">{valueObj.title}</a>
+				{end:}
+				<div id="logout" class="logBox" style="opacity: 0; width: 0; height: 0;">
+					{foreach:blocksLogout,key,valueObj}
+		                <div class="{valueObj.body_class}">
+		                    <div class="content">
+		                        {valueObj.content:h}
+		                    </div>
+		                </div>
+		            {end:}
+				</div>
+			</div>
