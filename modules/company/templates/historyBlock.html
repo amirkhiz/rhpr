@@ -1,0 +1,20 @@
+<script type="text/javascript">
+(function($){
+	$(document).ready(function() {
+		$('#historyBlock').magicSlider({autoHeight: false,dynamicTabsContent: "count",slideDirection: "horizontal"});
+	});
+})(jQuery);
+</script>
+
+<div class="magic-slider-wrapper">
+	<div class="magic-slider preload" id="historyBlock">
+		{foreach:history,key,value}
+		<div class="panel">
+			<div class="panel-wrapper">
+				<h2 class="title">sss</h2>
+				<p>{value.history}</p>
+			</div>
+		</div>
+		{end:}
+	</div>	<!-- end of:  magic-slider  -->
+</div>		<!-- end of:  magic-slider-wrapper  -->
