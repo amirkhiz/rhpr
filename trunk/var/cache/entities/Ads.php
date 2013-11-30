@@ -11,7 +11,7 @@ class DataObjects_Ads extends DB_DataObject
 
     public $__table = 'ads';                 // table name
     public $ads_id;                          // int(11)  not_null primary_key
-    public $usr_id;                          // int(11)  not_null
+    public $company_id;                      // int(11)  not_null
     public $title;                           // string(100)  not_null
     public $description;                     // blob(65535)  not_null blob
     public $start_date;                      // datetime(19)  not_null binary

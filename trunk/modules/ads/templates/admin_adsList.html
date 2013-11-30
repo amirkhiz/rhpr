@@ -31,13 +31,19 @@
 			<tbody>
 		        <tr flexy:foreach="aPagedData[data],key,aValue">
 		            <td align="center"><input type="checkbox" name="frmDelete[]" value="{aValue[ads_id]}" /></td>
-					<td nowrap>{aValue[username]}</td>
+					<td nowrap>{aValue[name]}</td>
 					<td nowrap>{formatDate(aValue[start_date])}</td>
 					<td nowrap>{formatDate(aValue[end_date])}</td>
 					<td nowrap>
+						{if:isEqual(aValue[block_id],4)}
+						<a href="{webRoot}/images/company/{aValue[image]}">
+							<img src="{webRoot}/images/company/small/small_{aValue[image]}" width="50"/>
+						</a>
+						{else:}
 						<a href="{webRoot}/images/ads/{aValue[image]}">
 							<img src="{webRoot}/images/ads/small/small_{aValue[image]}" width="50"/>
 						</a>
+						{end:}
 					</td>
 					<td nowrap>{aValue[block]}</td>
 		            <td width="10%" nowrap>

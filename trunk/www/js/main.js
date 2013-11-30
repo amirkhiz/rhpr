@@ -24,7 +24,7 @@ $(document).ready(function() {
 					$("#profileBranchBox").html(data);
 					$("#profileBranchBox").show().animate({
 						height: "377px",
-						top: "0",
+						top: "-377px",
 						opacity: 1
 					}, {queue:true, duration: 500});
 				},
@@ -35,7 +35,7 @@ $(document).ready(function() {
 		else {
 			$("#profileBranchBox").animate({
 				height: "0",
-				top: "377px",
+				top: "0",
 				opacity: 0
 			}, {queue:true, duration: 500});
 			//$("#profileBranchBox").fadeOut(1);
