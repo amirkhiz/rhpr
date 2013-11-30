@@ -177,5 +177,12 @@ $conf['table']['poll_answer'] = 'poll_answer';
 $conf['table']['ads'] = 'ads';
 $conf['table']['company'] = 'company';
 $conf['table']['branch'] = 'branch';
+$conf['table']['item_category'] = 'item_category';
+$conf['table']['document'] = 'document';
+$conf['table']['document_type'] = 'document_type';
+$conf['table']['item'] = 'item';
+$conf['table']['item_addition'] = 'item_addition';
+$conf['table']['item_type'] = 'item_type';
+$conf['table']['item_type_mapping'] = 'item_type_mapping';
 $conf['localConfig']['moduleName'] = 'default';
 ?>

@@ -110,17 +110,22 @@ class AdminAdsMgr extends SGL_Manager
 		/* 
 		 * Find Users From the user table to fetch in select box
 		 *  */
-		$user = DB_DataObject::factory($this->conf['table']['user']);
-		$user->selectAdd();
-		$user->selectAdd('usr_id, username');
-		$user->whereAdd('role_id = 2');
-		$user->find();
+		$query = "
+				SELECT c.company_id, c.name
+				FROM {$this->conf['table']['company']} AS c
+				LEFT JOIN {$this->conf['table']['user']} AS usr
+				ON usr.usr_id = c.usr_id
+				WHERE usr.role_id = " . SGL_INSTITUTIONAL;
+
+		$company = $this->dbh->getAll($query);
 		
-		$aUsers = array();
-		while ($user->fetch()) {
-			$aUsers[$user->usr_id] = $user->username;
+		$aCompany = array();
+		foreach ($company as $key => $value)
+		{
+			$aCompany[$value->company_id] = $value->name;
 		}
-		$output->aUsers = $aUsers;
+		$output->aCompany = $aCompany;
+		//echo "<pre>"; print_r($aCompany); echo "</pre>";die;
 		
 		$output->aBlocks = $this->aBlocks; 
 		
@@ -141,20 +146,28 @@ class AdminAdsMgr extends SGL_Manager
     {
         SGL::logMessage(null, PEAR_LOG_DEBUG);
         
-        
-        
         $ads = DB_DataObject::factory($this->conf['table']['ads']);
         $ads->setFrom($input->ads);
         $ads->ads_id = $this->dbh->nextId($this->conf['table']['ads']);
-        $ads->start_date = $this->dbh->quote($input->start_date);
-        $ads->end_date = $this->dbh->quote($input->end_date);
 
-        if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
-	        $input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
-	        $this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
-	        $ads->image = $input->aImage['name'];
-        }
+        $ads->start_date = date("Y-m-d", strtotime($input->ads->start_date));
+        $ads->end_date = date("Y-m-d", strtotime($input->ads->end_date));
+
         //echo "<pre>"; print_r($input->ads); echo "</pre>";die;
+        if ($input->ads->block_id != 4){
+	        if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
+		        $input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
+		        $this->cImage->uploadImage($input->aImage['name'], $input->aImage['tmp_name']);
+		        $ads->image = $input->aImage['name'];
+	        }
+        } else {
+			$companyId = $input->ads->company_id;
+			$company = DB_DataObject::factory($this->conf['table']['company']);
+			$company->get($companyId);
+			$ads->image = $company->logo;
+			//SGL_Output::makeUrl('company')
+        }
+        //echo "<pre>"; print_r($company); echo "</pre>";die;
         
         $success = $ads->insert();
 
@@ -188,6 +201,8 @@ class AdminAdsMgr extends SGL_Manager
         $ads->ads_id = $input->adsId;
         $ads->find(true);
         $ads->setFrom($input->ads);
+        $ads->start_date = date("Y-m-d", strtotime($input->ads->start_date));
+        $ads->end_date = date("Y-m-d", strtotime($input->ads->end_date));
         
         if(isset($input->aImage['name']) && $input->aImage['name'] != "") {
         	$input->aImage['name'] = $this->cImage->generateUniqueFileName($input->aImage['name']);
@@ -213,10 +228,10 @@ class AdminAdsMgr extends SGL_Manager
 
         $query = "
             	SELECT
-                  	*
+                  	a.*, c.name
                 FROM {$this->conf['table']['ads']} AS a
-				LEFT JOIN {$this->conf['table']['user']} AS usr
-					ON usr.usr_id = a.usr_id
+				LEFT JOIN {$this->conf['table']['company']} AS c
+					ON c.company_id = a.company_id
 			";
 
 		$limit = $_SESSION['aPrefs']['resPerPage'];

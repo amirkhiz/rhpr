@@ -1,0 +1,7 @@
+<p>{leadArticle[bodyHtml]:h}</p>
+<p flexy:if=hasPerms(#ARTICLEMGR_CMD_UPDATE#)> 
+    <a href="{makeUrl(#edit#,#article#,#publisher#,##,#frmArticleID|articleID#)}redir/{redir}" />
+        {translate(#Edit#)}
+        <span class="glyphicon glyphicon-edit"></span>
+    </a>
+</p>

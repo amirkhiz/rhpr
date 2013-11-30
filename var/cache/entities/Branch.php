@@ -14,8 +14,8 @@ class DataObjects_Branch extends DB_DataObject
     public $usr_id;                          // int(11)  not_null
     public $company_id;                      // int(11)  not_null
     public $village_id;                      // int(11)  not_null
+    public $region_id;                       // int(11)  not_null
     public $city_id;                         // int(11)  not_null
-    public $country_id;                      // int(11)  not_null
     public $name;                            // string(128)  not_null
     public $contact_person_1;                // string(255)  not_null
     public $contact_person_2;                // string(255)  not_null
@@ -26,6 +26,8 @@ class DataObjects_Branch extends DB_DataObject
     public $mobile;                          // string(16)  not_null
     public $history;                         // blob(65535)  not_null blob
     public $image;                           // string(255)  not_null
+    public $date_created;                    // datetime(19)  not_null binary
+    public $last_updated;                    // datetime(19)  not_null binary
 
     /* Static get */
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('DataObjects_Branch',$k,$v); }

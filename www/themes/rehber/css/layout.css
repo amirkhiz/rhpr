@@ -1129,11 +1129,11 @@ div#leftMenu {
 
 /* Institutional Profile Style */
 .profilePage {
-	position: relative;
+	
 }
 .profilePart{
 	margin: 5px 0;
-	overflow: hidden;
+	position: relative;
 }
 .profileLogo {
 	float: left;
@@ -1238,7 +1238,7 @@ div#leftMenu {
 .profileBranchBox {
 	border: 1px solid #eaeaea;
 	position: absolute;
-	top: 462px;
+	top: 0;
 	right: 0;
 	width:425px;
 	padding: 10x;

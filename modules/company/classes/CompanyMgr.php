@@ -124,31 +124,32 @@ class CompanyMgr extends SGL_Manager
         	$aCity[$city->city_id] = $city->title;
         }
         $output->aCity = $aCity;
-        
-        $query = "
-		        SELECT
-			        c.city_id AS cId, c.Title AS cTitle,
-			        r.region_id AS rId, r.Title AS rTitle,
-			        v.village_id AS vId, v.Title AS vTitle
-		        FROM {$this->conf['table']['city']} AS c
-		        RIGHT JOIN {$this->conf['table']['region']} AS r
-		        	ON r.city_id = c.city_id
-		        RIGHT JOIN {$this->conf['table']['village']} AS v
-		        	ON v.region_id = r.region_id
-		        WHERE c.city_id = {$output->company->city_id}
-	        ";
-        
-        $lists = $this->dbh->getAll($query);
-        $aRegion = array();
-        $aVillage = array();
-        foreach ($lists as $key => $value)
+        if (!$output->isAdd)
         {
-        $aRegion[$value->rId] = $value->rTitle;
-        $aVillage[$value->vId] = $value->vTitle;
-        }
-        $output->aRegion = $aRegion;
+	        $query = "
+			        SELECT
+				        c.city_id AS cId, c.Title AS cTitle,
+				        r.region_id AS rId, r.Title AS rTitle,
+				        v.village_id AS vId, v.Title AS vTitle
+			        FROM {$this->conf['table']['city']} AS c
+			        RIGHT JOIN {$this->conf['table']['region']} AS r
+			        	ON r.city_id = c.city_id
+			        RIGHT JOIN {$this->conf['table']['village']} AS v
+			        	ON v.region_id = r.region_id
+			        WHERE c.city_id = {$output->company->city_id}
+		        ";
+	        
+	        $lists = $this->dbh->getAll($query);
+	        $aRegion = array();
+	        $aVillage = array();
+	        foreach ($lists as $key => $value)
+	        {
+		        $aRegion[$value->rId] = $value->rTitle;
+		        $aVillage[$value->vId] = $value->vTitle;
+	        }
+	        $output->aRegion = $aRegion;
         	$output->aVillage = $aVillage;
-         
+        }
         //echo '<pre>';print_r($usrInfo);echo '</pre>';die;
          
         $output->aCats = array('cat1', 'cat2', 'cat3');
@@ -350,6 +351,15 @@ class CompanyMgr extends SGL_Manager
     	$output->masterTemplate = 'masterLeftCol.html';
     	$output->masterLayout = 'layout-navtop-2col_localleft.css';
     	
+    	/* if (isset($input->companyId))
+    	{
+    		$oCompany = DB_DataObject::factory($this->conf['table']['company']);
+    		$query = "
+    			SELECT c.company_id, c.
+    			
+    			";
+    		$roleId = 
+    	} */
     	switch (SGL_Session::getRoleId())
     	{
     		case SGL_INSTITUTIONAL:
