@@ -1,0 +1,14 @@
+<ul class='sf-menu sf-vertical' id='categoryMenu'>
+	{foreach:items,key,value}
+		<li>
+			{if:value[SubMenu]}
+			<ul>
+				{foreach:value[SubMenu],k,v}
+					<li><a href="">{v[title]}</a></li>
+				{end:}
+			</ul>
+			{end:}
+			<a href="">{value[title]}</a>
+		</li>
+	{end:}
+</ul>

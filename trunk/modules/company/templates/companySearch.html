@@ -1,0 +1,39 @@
+{msgGet()}
+<div class="redBtn">{translate(pageTitle)}</div>
+<div class="gradientBack searchRes">
+    <div class="searchResRow" flexy:foreach="aPagedData[data],key,aValue">
+    	{if:aValue[logo]}
+    	<div class="searchResLogo">
+    		<img src="{webRoot}/images/company/small/small_{aValue[logo]}" />
+    	</div>
+		{end:}
+		<div class="searchResDetail">
+			<div class="searchResName">
+				<span class="searchResTitle">{translate(#Name#)} : </span>
+				{aValue[name]}
+			</div>
+			<div class="searchResCat">
+				<span class="searchResTitle">{translate(#Category#)} : </span>
+				{aValue[catTitle]}
+			</div>
+			<div class="searchResAddr">
+				<span class="searchResTitle">{translate(#Address#)} : </span>
+				{aValue[addr]}
+			</div>
+			<div class="searchResCity">
+				<span class="searchResTitle">{translate(#City#)} : </span>
+				{aValue[cityTitle]}
+			</div>
+			<div class="searchResVil">
+				<span class="searchResTitle">{translate(#Village#)} : </span>
+				{aValue[vilTitle]}
+			</div>
+			<div class="searchResHistory">
+				<span class="searchResTitle">{translate(#Introduction#)} : </span>
+				{aValue[history]}
+			</div>
+		</div>
+		<div class="clearfix"><!-- Clear & Fix --></div>
+    </div>
+	<div colspan="5">{if:pager}<flexy:include src="admin_pager_table.html" />{end:}</div>
+</div>

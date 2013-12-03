@@ -86,13 +86,12 @@
 		</div>
 	</div>
 	<div class="clear"><!-- CLear & Fix --></div>
-	
-	<div class="profileAction">
-		{if:isOwner}
+	{if:isOwner}
+	<div id="owner" class="profileAction">
 		<a class="greyBtn profileEditBtn" href="{makeUrl(#edit#,#company#,#company#)}">{translate(#Edit Profile#)}</a>
-		{end:}
 		{if:company.has_branch}
 		<a class="redBtn profileAddBranchBtn" href="{makeUrl(#add#,#branch#,#company#)}frmCompanyID/{company.company_id}">{translate(#Add Branchs#)}</a>
 		{end:}
 	</div>
+	{end:}
 </div>

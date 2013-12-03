@@ -96,9 +96,7 @@ class AdminCategoryMgr extends SGL_Manager
         $input->aDelete     = $req->get('frmDelete');
         $input->submitted   = $req->get('submitted');
         $input->category 	= (object)$req->get('category');
-        $input->parentId    = $req->get('frmParentID');
         $input->categoryId 	= $req->get('frmCategoryID');
-        $input->levelId 	= $req->get('frmLevelID');
         $input->items     	= $req->get('_items');
     }
 
@@ -108,6 +106,17 @@ class AdminCategoryMgr extends SGL_Manager
             $c = SGL_Config::singleton();
             $c->set('debug', array('showUntranslated' => false));
         }
+        
+        $category = DB_DataObject::factory($this->conf['table']['category']);
+        $category->selectAdd();
+        $category->selectAdd('title,category_id');
+        $category->whereAdd('parent_id = 0');
+        $category->find();
+        while($category->fetch()){
+        	$aCategory[$category->category_id] = $category->title;
+        }
+        
+        $output->aCategory = $aCategory;
     }
 
 
@@ -116,44 +125,15 @@ class AdminCategoryMgr extends SGL_Manager
         SGL::logMessage(null, PEAR_LOG_DEBUG);
         $output->template  = 'categoryEdit.html';
         
-        $output->pageTitle = "Add " . $this->aLevelTitle[$input->levelId];
+        $output->pageTitle = "Category :: Add ";
         
         $output->action    = 'insert';
-        $output->wysiwyg   = true;
-        
-        if($input->levelId == 1){
-        	$output->parentId = 0; 
-        	$output->parentTitle = SGL_String::translate("Root");
-        	$output->levelId = 1;
-        }else{
-        	$output->parentId = $input->parentId;
-        	$output->levelId = $input->levelId;
-        	$output->parentTitle = $this->dbh->getOne("select title from {$this->conf['table']['category']} where category_id = '{$input->parentId}'");
-        }
-        /*
-        $parentLevelId = $input->levelId - 1;
-        echo "<br />";
-        echo $input->parentId;
-        $category = DB_DataObject::factory($this->conf['table']['category']);
-        $category->whereAdd("parent_id = " . $input->parentId);
-        $category->find();
-        $aCategories = array();
-        while($category->fetch()){
-        	$aCategories[$category->category_id] = $category->title;
-        }
-        $output->categories = $aCategories;
-        
-        $output->levelId = $input->levelId;
-        $output->parentId = $input->categoryId;
-        */
+
     }
 
     function _cmd_insert(&$input, &$output)
     {
         SGL::logMessage(null, PEAR_LOG_DEBUG);
-        
-        #echo "<pre>"; print_r($input->category); echo "</pre>"; exit;
-        
         
         SGL_DB::setConnection();
         //  get new order number
@@ -167,14 +147,18 @@ class AdminCategoryMgr extends SGL_Manager
         $category = DB_DataObject::factory($this->conf['table']['category']);
         $category->setFrom($input->category);
         $category->category_id 		= $this->dbh->nextId($this->conf['table']['category']);
-
         $category->status 			= (isset($input->category->status)) ? 1 : 0;
-        
         $category->created_date 	= SGL_Date::getTime(true);
         $category->updated_date 	= SGL_Date::getTime(true);
         $category->created_by 		= SGL_Session::getUid();
         $category->updated_by 		= SGL_Session::getUid();
         $category->order_id 		= $maxOrderId;
+        
+        if ($category->parent_id == 0)
+        	$category->level_id = 1;
+        else
+        	$category->level_id = 2;
+        
         $success = $category->insert();
 
         if ($success !== false) {
@@ -188,8 +172,6 @@ class AdminCategoryMgr extends SGL_Manager
 		    'moduleName' => 'category',
 		    'managerName' => 'admincategory',
 		    'action' => 'list',
-		    'frmLevelID' => $category->level_id,
-        	'frmParentID' => $category->parent_id
 		);
 		SGL_HTTP::redirect($options);
 		
@@ -207,24 +189,7 @@ class AdminCategoryMgr extends SGL_Manager
         $category->get($input->categoryId);
         $output->category = $category;
         
-        $output->levelId = $category->level_id;
-        $output->pageTitle = "Edit " . $this->aLevelTitle[$category->level_id];
-        
-        $output->isPublished = empty($output->category->status) ? '' : 'checked';
-        
-        $parentLevelId = $category->level_id - 1;
-        
-        $category = DB_DataObject::factory($this->conf['table']['category']);
-        $category->whereAdd("level_id = " . $parentLevelId);
-        $category->find();
-        $aCategories = array();
-        while($category->fetch()){
-        	$aCategories[$category->category_id] = $category->title;
-        }
-        $output->categories = $aCategories;
-        $output->parentId = $this->da->getParentId($input->categoryId);
-        $output->parentTitle = $this->dbh->getOne("select title from {$this->conf['table']['category']} where category_id = '{$output->parentId}'");
-        
+        $output->pageTitle = "Edit Category";
     }
 
     function _cmd_update(&$input, &$output)
@@ -234,11 +199,15 @@ class AdminCategoryMgr extends SGL_Manager
         $category->category_id = $input->categoryId;
         $category->find(true);
         $category->setFrom($input->category);
-        
         $category->status 			= (isset($input->category->status)) ? 1 : 0;
-        
         $category->updated_date 	= SGL_Date::getTime(true);
         $category->updated_by 		= SGL_Session::getUid();
+        
+        if ($category->parent_id == 0)
+        	$category->level_id = 1;
+        else
+        	$category->level_id = 2;
+        
         $success = $category->update();
 
         if ($success !== false) {
@@ -252,8 +221,6 @@ class AdminCategoryMgr extends SGL_Manager
 		    'moduleName' => 'category',
 		    'managerName' => 'admincategory',
 		    'action' => 'list',
-		    'frmLevelID' => $category->level_id,
-        	'frmParentID' => $category->parent_id
 		);
 		SGL_HTTP::redirect($options);
     }
@@ -263,64 +230,35 @@ class AdminCategoryMgr extends SGL_Manager
         SGL::logMessage(null, PEAR_LOG_DEBUG);
         $output->template  = 'categoryList.html';
         
-        $output->pageTitle = $this->aLevelTitle[$input->levelId] . " list";
-        $output->btnTitle = "New " . $this->aLevelTitle[$input->levelId];
+        $output->pageTitle = "Category list";
         
-        $output->parentTitle = $this->aLevelTitle[$input->levelId - 1];
-        
-        $output->searchCategory = "Search " . $this->aLevelTitle[$input->levelId - 1];
-        
-        $parentSearch = "";
-        if(!empty($input->parentId)){
-        	$parentSearch = " and c.parent_id = ' " . $input->parentId . " '";
-        	$output->parentId = $input->parentId;
-        }
-        if(!empty($input->categoryId)){
-        	$topestCats = $this->dbh->getRow("select c1.category_id as topId, c2.parent_id as topestId 
-        							from category as c1
-        							join category as c2 on c2.category_id = c1.parent_id    
-        							where c1.parent_id = '" . $input->categoryId . "'");
-        	$parentSearch = " and c.parent_id = ' " . $topestCats->topestId . " '";
-        	$output->parentId = $topestCats->topestId;
-        }
-        $output->topper = $this->da->getParentId($input->parentId, 1);
-        $output->parentId = $input->parentId;
-    	$query = " SELECT 
-    					c.*, m.title as pTitle 
-    				FROM `category` as c left join category as m on c.parent_id = m.category_id
-    				where c.level_id = ".$input->levelId."
-    				$parentSearch
-    				order by c.order_id
-    				";
+    	$query = " 
+    			SELECT 
+    				c.*, m.title AS pTitle 
+    			FROM {$this->conf['table']['category']} AS c 
+    			LEFT JOIN {$this->conf['table']['category']} AS m 
+    				ON c.parent_id = m.category_id
+    			ORDER BY c.order_id
+    		";
 
-            $limit = $_SESSION['aPrefs']['resPerPage'];
+		$limit = $_SESSION['aPrefs']['resPerPage'];
             
-            $pagerOptions = array(
-                'mode'      => 'Sliding',
-                'delta'     => 8,
-                'perPage'   => 10, 
+		$pagerOptions = array(
+        	'mode'      => 'Sliding',
+            'delta'     => 8,
+            'perPage'   => 10, 
+		);
+        $aPagedData = SGL_DB::getPagedData($this->dbh, $query, $pagerOptions);
+        if (PEAR::isError($aPagedData)) {
+        	return false;
+		}
+        $output->aPagedData = $aPagedData;
+           
+        $output->totalItems = $aPagedData['totalItems'];
 
-            );
-            $aPagedData = SGL_DB::getPagedData($this->dbh, $query, $pagerOptions);
-            if (PEAR::isError($aPagedData)) {
-                return false;
-            }
-            $output->aPagedData = $aPagedData;
-            
-            $output->totalItems = $aPagedData['totalItems'];
-
-            if (is_array($aPagedData['data']) && count($aPagedData['data'])) {
-                $output->pager = ($aPagedData['totalItems'] <= $limit) ? false : true;
-            }
-            $output->parentBox = "";
-            if(!empty($input->parentId)){
-            	$output->parentBox = $aPagedData['data'][0]['pTitle'];
-            }
-            $output->levelId = $input->levelId;
-            $output->parentLevel = $input->levelId - 1;
-            if($input->levelId != 4){
-            	$output->childLevel = $input->levelId + 1;
-            }
+        if (is_array($aPagedData['data']) && count($aPagedData['data'])) {
+        	$output->pager = ($aPagedData['totalItems'] <= $limit) ? false : true;
+		}
     }
 
     function _cmd_delete(&$input, &$output)
@@ -330,8 +268,6 @@ class AdminCategoryMgr extends SGL_Manager
             foreach ($input->aDelete as $index => $categoryId) {
                 $category = DB_DataObject::factory($this->conf['table']['category']);
                 $category->get($categoryId);
-                $levelId = $category->level_id;
-                $parentId = $category->parent_id;
                 $category->delete();
                 unset($category);
             }
@@ -345,9 +281,6 @@ class AdminCategoryMgr extends SGL_Manager
 		    'moduleName' => 'category',
 		    'managerName' => 'admincategory',
 		    'action' => 'list',
-		    'frmLevelID' => $levelId,
-        	'frmParentID' => $parentId
-        	
 		);
 		SGL_HTTP::redirect($options);
     }
@@ -360,7 +293,6 @@ class AdminCategoryMgr extends SGL_Manager
         $output->template  = 'categoryReorder.html';
         $output->action    = 'reorderUpdate';
         $categoryList = DB_DataObject::factory($this->conf['table']['category']);
-        $categoryList->whereAdd("parent_id = " . $input->parentId);
         $categoryList->orderBy('order_id');
         $result = $categoryList->find();
         if ($result > 0) {
@@ -370,8 +302,6 @@ class AdminCategoryMgr extends SGL_Manager
             }
             $output->aCategorys = $aCategorys;
         }
-        $output->levelId = $categoryList->level_id;
-        $output->parentId = $input->parentId;
     }
     
 	function _cmd_reorderUpdate(&$input, &$output)
@@ -386,8 +316,6 @@ class AdminCategoryMgr extends SGL_Manager
                 $category = DB_DataObject::factory($this->conf['table']['category']);
                 $category->get($categoryId);
                 $category->order_id = $pos;
-                $levelId = $category->level_id;
-                $parentId = $category->parent_id;
                 $success = $category->update();
                 unset($category);
                 $pos++;
