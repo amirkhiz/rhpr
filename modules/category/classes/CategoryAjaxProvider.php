@@ -83,7 +83,6 @@ class CategoryAjaxProvider extends SGL_AjaxProvider2
                 'mode'      => 'Sliding',
                 'delta'     => 8,
                 'perPage'   => 10000, 
-
             );
             $aPagedData = SGL_DB::getPagedData($this->dbh, $query, $pagerOptions);
        //echo "<pre>"; print_r($aPagedData); echo "</pre>";
@@ -135,7 +134,6 @@ class CategoryAjaxProvider extends SGL_AjaxProvider2
                 'mode'      => 'Sliding',
                 'delta'     => 8,
                 'perPage'   => 10000, 
-
             );
             $aPagedData = SGL_DB::getPagedData($this->dbh, $query, $pagerOptions);
        //echo "<pre>"; print_r($aPagedData); echo "</pre>";

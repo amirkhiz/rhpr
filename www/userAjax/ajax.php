@@ -12,6 +12,7 @@
 	{
 		$companyId = $_POST['frmCompanyID'];
 		$editUrl = $_POST['frmEdit'];
+		$isOwner = $_POST['frmOwner'];
 		
 		$query = "
 				SELECT b.*, c.title AS city, v.title AS village, r.title AS region
@@ -25,9 +26,14 @@
 				WHERE b.company_id = $companyId
 			";
 		$result = mysqli_query($conRehber, $query);
+
 		$data = '';
 		while ($row = mysqli_fetch_object($result))
 		{
+			$row->telephone_1 = substr_replace(substr_replace($row->telephone_1, ' ', 6, 0), ' ', 3, 0) ;
+			$row->telephone_2 = substr_replace(substr_replace($row->telephone_2, ' ', 6, 0), ' ', 3, 0) ;
+			$row->fax = substr_replace(substr_replace($row->fax, ' ', 6, 0), ' ', 3, 0) ;
+			$row->mobile = substr_replace(substr_replace($row->mobile, ' ', 6, 0), ' ', 3, 0) ;
 			$data .= '
 				<h5>' . $row->name . '</h5>
 				<dl style="overflow:hidden;">
@@ -47,9 +53,11 @@
 			        <dd class="col-lg-5">0&nbsp;' . $row->fax . '&nbsp;</dd>
 			        <dt class="col-lg-5">Mobile</dt>
 			        <dd class="col-lg-5">0&nbsp;' . $row->mobile . '&nbsp;</dd>
-			    </dl>
-			    <div class="branchEditBtn"><a class="greyBtn" href="' . $editUrl . 'frmBranchID/' . $row->branch_id . '">Edit Branch</a></div>
-			';
+			    </dl>';
+			if ($isOwner == 'true')
+				$data .= '
+			    	<div class="branchEditBtn"><a class="greyBtn" href="' . $editUrl . 'frmBranchID/' . $row->branch_id . '">Edit Branch</a></div>
+				';
 		}
 		echo $data;
 	}

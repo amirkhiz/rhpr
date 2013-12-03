@@ -6,9 +6,12 @@ $(document).ready(function() {
 		var companyId = $(this).attr('data');
 		var ajaxurl = "http://localhost/rhpr/www/userAjax/ajax.php";
 		var table = $(this).attr('data');
+		//var isOwner = $('.profilePage').find('#owner');
 		var editUrl = makeUrl({module: "company", manager: "branch", action: "edit"});
 
-		//console.log(editUrl); return false;
+		if ($('#owner').length > 0) isOwner = true; else isOwner = false;
+		
+		console.log(isOwner);
 		if (branchsShowClick) 
 			$.ajax({
 				url: ajaxurl,
@@ -17,10 +20,11 @@ $(document).ready(function() {
 				data: {
 					'action': 'getBranch',
 					'frmCompanyID': companyId,
-					'frmEdit': editUrl
+					'frmEdit': editUrl,
+					'frmOwner': isOwner
 				},
 				success: function(data){
-					console.log(data);
+					//console.log(data);
 					$("#profileBranchBox").html(data);
 					$("#profileBranchBox").show().animate({
 						height: "377px",

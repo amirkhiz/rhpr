@@ -1,0 +1,22 @@
+			<div class="searchBox">
+				<form name="frmSearch" action="{makeUrl(#search#,#company#,#company#)}" method="post" flexy:ignore>
+					<div class="searchInp">
+						<input type="text" name="search[text]"/>
+					</div>
+					<div class="searchTyp searchCat">
+						<select class="searchOptBtn" name="search[category_id]">
+							<option value="0">{translate(#All Categories#)}</option>
+							{generateSelect(aCats):h}
+						</select>
+					</div>
+					<div class="searchTyp searchCity">
+						<select class="searchOptBtn" name="search[city_id]">
+							<option value="0">{translate(#All Cities#)}</option>
+							{generateSelect(aCity):h}
+						</select>
+					</div>
+					<div class="searchBtn">
+						<input type="submit" name="submit" value="{translate(#Search#)}"/>
+					</div>
+				</form>
+			</div>

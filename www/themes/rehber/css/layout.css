@@ -404,9 +404,13 @@ div#footer {
 	overflow: hidden;
 }
 
+	div#footer .socialBtns {
+		overflow: hidden;
+	}
 	div#footer .footerMenu {
 		float: right;
 		text-align: left;
+		margin-right: 100px;
 	}
 		div#footer .footerMenu h5 {
 			color: #333;
@@ -428,13 +432,27 @@ div#footer {
 			color: #333;
 			font-weight: bold;
 		}
-		div#footer .footerCats ul li {
+		div#footer .footerCats ul {
 			list-style: none;
 			margin-left: 15px;
+			width:750px;
+			overflow:hidden;
 		}
-			div#footer .footerCats ul li a {
-				color: #666;
+			div#footer .footerCats ul li {
+				list-style: none;
+				line-height:1.5em;
+				float:left;
+				display:inline;
 			}
+				div#footer .footerCats ul li a {
+					color: #666;
+				}
+				
+#one li  	{ float: none !important; display: block !important;} /* 2 col Cats */				
+#double li  { width : 50%;} /* 2 col Cats */
+#triple li  { width : 33.333%; } /* 3 col Cats */
+#quad li    { width : 25%; } /* 4 col Cats */
+#six li     { width : 16.666%; } /* 6 col Cats */
     
     div#footer p {
         margin-bottom: 0.1em;
@@ -565,6 +583,7 @@ div.block {
 			border: none;
 			width: 300px;
 			height: 32px;
+			padding-left: 10px;
 		}
 		
 		.searchBox .searchTyp {
@@ -594,6 +613,11 @@ div.block {
 			.searchBox .searchBtn input:hover {
 				color: #ccc;
 			}
+			
+		.searchBox .searchTyp .searchOptBtn {
+			width: 100px;
+			border: navajowhite;
+		}
 			
 	.regBox {
 		float: right;
@@ -714,7 +738,7 @@ div#leftMenu {
 			.leftMenu ul li a:hover {
 				color: #fff;
 				text-decoration: none;
-				background: url(<?php echo $baseUrl;?>/images/bg/menuLiImgH.png) no-repeat right center;
+				background: none;
 			}
 	
 /* Poll Block Style */
@@ -757,7 +781,7 @@ div#leftMenu {
 }
 
 /* User Register form */
-.registerForm {
+.registerForm, .gradientBack {
 	background: #eaeaea;
 	background-image: -webkit-gradient(
 		linear,
@@ -1348,4 +1372,46 @@ a.grey2dBtn {
 		.submitAct input, .cancelAct a {
 			width: 100px;
 			text-decoration: none;
+		}
+/* Search Result Style */
+.searchRes {
+	
+}
+	.searchRes .searchResRow {
+		background-color: #fff;
+		border-radius: 4px;
+		margin: 15px 5px;
+		overflow: hidden;
+	}
+		.searchRes .searchResRow .searchResLogo {
+			width: 150px;
+			height: 150px;
+			line-height: 150px;
+			background-color: #fff;
+			float: left;
+		}
+		.searchRes .searchResRow .searchResDetail {
+			float: left;
+			width: 70%;
+			font-size: 12px;
+			color: #aaa;
+		}
+		.searchRes .searchResRow .searchResDetail .searchResTitle {
+			color: #777;
+		}
+		.searchRes .searchResRow .searchResDetail .searchResName {
+			font-weight: bold;
+			font-size: 14px;
+			color: #000;
+		}
+		.searchRes .searchResRow .searchResDetail .searchResAddr {
+		}
+		.searchRes .searchResRow .searchResDetail .searchRes {
+		}
+		.searchRes .searchResRow .searchResDetail .searchRes {
+		}
+		.searchRes .searchResRow .searchResDetail .searchRes {
+		}
+		.searchRes .searchResRow .searchResDetail .searchRes {
+			
 		}

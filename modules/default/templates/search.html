@@ -1,37 +1,8 @@
 		<div class="searchBanner">
-			<div class="searchBox">
-				<form name="frmSearch" method="post" flexy:ignore>
-					<div class="searchInp">
-						<input type="text" name="searchTxt"/>
-					</div>
-					<div class="searchTyp searchCat">
-						<a href="#">{translate(#All Categories#)}</a>
-					</div>
-					<div class="searchTyp searchCity">
-						<a href="#">{translate(#All Cities#)}</a>
-					</div>
-					<div class="searchBtn">
-						<input type="submit" name="submit" value="{translate(#Search#)}"/>
-					</div>
-				</form>
-			</div>
+			<flexy:include src="blocksSearch.html" />
 			<div class="regBox">
 				<flexy:include src="blocksLogin.html" />
 				<flexy:include src="blocksLogout.html" />
-				<!--
-				<div class="orgRegBtn">
-					<a href="#" id="kurumsalLoginBtn">{translate(#Institutional#)}</a>
-					<div id="kurumsalLogin" style="display: none;">
-						<flexy:include src="blocksKurumsalLogin.html" />
-					</div>
-				</div>
-				<div class="singleRegBtn">
-					<a href="#" id="breyselLoginBtn">{translate(#Individual#)}</a>
-					<div id="breyselLogin" style="display: none;">
-						<flexy:include src="blocksBreyselLogin.html" />
-					</div>
-				</div>
-				-->
 			</div>
 		</div>
 		<div class="clearfix"><!-- Clear And Fix --></div>

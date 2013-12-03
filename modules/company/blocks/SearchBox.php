@@ -32,7 +32,7 @@
 // +---------------------------------------------------------------------------+
 // | Seagull 0.6                                                               |
 // +---------------------------------------------------------------------------+
-// | Ads.php                                                                   |
+// | SearchBox.php                                                             |
 // +---------------------------------------------------------------------------+
 // | Author: Siavash AmirKhiz <amirkhiz@gmail.com>                             |
 // +---------------------------------------------------------------------------+
@@ -44,50 +44,65 @@ include_once 'DB/DataObject.php';
  * @author  Author: Siavash AmirKhiz <amirkhiz@gmail.com>
  * @version 1.0
  */
-class Ads_Block_Ads extends SGL_Manager
+class Company_Block_SearchBox extends SGL_Manager
 {
-	var $template = '';
-    var $templatePath 	= 'ads';
-    var $blockPos = array(
-    		0 => 'topSlider',
-    		1 => 'left',
-    		2 => 'video',
-    		3 => 'footerFix',
-    		4 => 'footerSlider',
-    		5 => 'offers',
-    		6 => 'right'
-    	);
+	var $template = 'searchBoxBlock.html';
+    var $templatePath 	= 'company';
     
     function init($output, $blockId, $aParams)
     {
         SGL::logMessage(null, PEAR_LOG_DEBUG);
             
-        return $this->getBlockContent($aParams);
+        return $this->getBlockContent();
     }
 
-    function getBlockContent($aParams)
+    function getBlockContent()
     {
         $blockOutput = new SGL_Output();
-        $blockOutput->aAds = $this->makedata($aParams);
-        $this->template = $this->blockPos[$aParams['adsPosition']] . 'Block.html';
+        $blockOutput->aCats = $this->getCats();
+        $blockOutput->aCity = $this->getCity();
         $blockOutput->webRoot = SGL_BASE_URL;
         return $this->process($blockOutput);
     }
     
-    function makedata($aParams)
+    function getCats()
     {
-    	$ads = DB_DataObject::factory($this->conf['table']['ads']);
-    	$ads->whereAdd('block_id = ' . $aParams['adsPosition']);
-    	$ads->find();
-    	$aAds = array();
-    	while ($ads->fetch())
+    	$query = "
+    			SELECT cat.category_id AS catId, cat.title AS catTitle
+    			FROM {$this->conf['table']['company']} AS cmp
+    			JOIN {$this->conf['table']['category']} AS cat
+    			ON cat.category_id = cmp.category_id
+    		";
+    	$category = $this->dbh->getAll($query);
+    	
+    	$aCategory = array();
+    	foreach ($category as $key => $value)
     	{
-    		$aAds[$ads->ads_id] = clone $ads;
-    		$aAds[$ads->ads_id]->block = $this->blockPos[$ads->block_id];
-    		$aAds[$ads->ads_id]->profileUrl = SGL_Output::makeUrl('viewProfile','company','company') . 'frmCompanyID/' . $ads->company_id;
+    		$aCategory[$value->catId] = $value->catTitle;
     	}
-    	//echo '<pre>';print_r($aAds);echo '</pre>';die;
-    	return $aAds;
+    	
+    	//echo '<pre>';print_r($aCategory);echo '</pre>';die;
+    	return $aCategory;
+    }
+    
+    function getCity()
+    {
+    $query = "
+    			SELECT city.city_id AS cityId, city.title AS cityTitle
+    			FROM {$this->conf['table']['company']} AS cmp
+    			JOIN {$this->conf['table']['city']} AS city
+    			ON city.city_id = cmp.city_id
+    		";
+    	$city = $this->dbh->getAll($query);
+    	
+    	$aCity = array();
+    	foreach ($city as $key => $value)
+    	{
+    		$aCity[$value->cityId] = $value->cityTitle;
+    	}
+    	 
+    	//echo '<pre>';print_r($aCategory);echo '</pre>';die;
+    	return $aCity;
     }
     
 	function process($output)
@@ -97,12 +112,32 @@ class Ads_Block_Ads extends SGL_Manager
  		// use moduleName for template path setting
  		$output->moduleName     = $this->templatePath;
  		$output->masterTemplate = $this->template;
- 		$output->results = $asliders;
  		$output->conf=$conf;
  		 
  		$view = new SGL_HtmlSimpleView($output);
  		return $view->render();
     }
     
+	function move_to_top($array, $key) {
+	    $temp = array($key => $array[$key]);
+	    unset($array[$key]);
+	    $array = $temp + $array;
+	    return $array;
+	}
+    
+    function objectToArray( $data )
+    {
+    	if (is_array($data) || is_object($data))
+    		//if (count($data))
+    	{
+    		$result = array();
+    		foreach ($data as $key => $value)
+    		{
+    			$result[$key] = $this->objectToArray($value);
+    		}
+    		return $result;
+    	}
+    	return $data;
+    }
 }
 ?>

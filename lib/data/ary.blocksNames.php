@@ -11,6 +11,7 @@ $aBlocksNames = array(
     'AdminBreadcrumbs' => 'AdminBreadcrumbs',
     'MainNav' => 'MainNav',
     'MainBreadcrumb' => 'MainBreadcrumb',
+	'Search' => 'Search',
     'FirstPage' => 'FirstPage',
 	'Slider' => 'Slider',
 	'LeftMenu' => 'LeftMenu',

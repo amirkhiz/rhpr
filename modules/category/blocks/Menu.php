@@ -32,7 +32,7 @@
 // +---------------------------------------------------------------------------+
 // | Seagull 0.6                                                               |
 // +---------------------------------------------------------------------------+
-// | Ads.php                                                                   |
+// | Menu.php                                                                   |
 // +---------------------------------------------------------------------------+
 // | Author: Siavash AmirKhiz <amirkhiz@gmail.com>                             |
 // +---------------------------------------------------------------------------+
@@ -44,19 +44,12 @@ include_once 'DB/DataObject.php';
  * @author  Author: Siavash AmirKhiz <amirkhiz@gmail.com>
  * @version 1.0
  */
-class Ads_Block_Ads extends SGL_Manager
+class Category_Block_Menu extends SGL_Manager
 {
+	var $leftMenuTemplate   = 'menuBlock.html';
+	var $footerMenuTemplate = 'footerMenuBlock.html';
 	var $template = '';
-    var $templatePath 	= 'ads';
-    var $blockPos = array(
-    		0 => 'topSlider',
-    		1 => 'left',
-    		2 => 'video',
-    		3 => 'footerFix',
-    		4 => 'footerSlider',
-    		5 => 'offers',
-    		6 => 'right'
-    	);
+    var $templatePath 	= 'category';
     
     function init($output, $blockId, $aParams)
     {
@@ -68,26 +61,68 @@ class Ads_Block_Ads extends SGL_Manager
     function getBlockContent($aParams)
     {
         $blockOutput = new SGL_Output();
-        $blockOutput->aAds = $this->makedata($aParams);
-        $this->template = $this->blockPos[$aParams['adsPosition']] . 'Block.html';
+        $blockOutput->items = $this->makedata($aParams, $blockOutput);
         $blockOutput->webRoot = SGL_BASE_URL;
         return $this->process($blockOutput);
     }
     
-    function makedata($aParams)
+    function makedata($aParams, $output)
     {
-    	$ads = DB_DataObject::factory($this->conf['table']['ads']);
-    	$ads->whereAdd('block_id = ' . $aParams['adsPosition']);
-    	$ads->find();
-    	$aAds = array();
-    	while ($ads->fetch())
+    	$oCategory = DB_DataObject::factory($this->conf['table']['category']);
+    	$oCategory->whereAdd('level_id = 1');
+    	if ($aParams['position'] == 0)
+    		$oCategory->limit($aParams['limit']);
+    	$oCategory->find();
+    	
+    	$oSubCategory = DB_DataObject::factory($this->conf['table']['category']);
+    	$oSubCategory->whereAdd('level_id = 2');
+    	if ($aParams['position'] == 1)
+    		$oSubCategory->limit($aParams['limit']);
+    	$oSubCategory->find();
+    	
+    	$aCategory = array();
+    	while ($oCategory->fetch())
     	{
-    		$aAds[$ads->ads_id] = clone $ads;
-    		$aAds[$ads->ads_id]->block = $this->blockPos[$ads->block_id];
-    		$aAds[$ads->ads_id]->profileUrl = SGL_Output::makeUrl('viewProfile','company','company') . 'frmCompanyID/' . $ads->company_id;
+    		$aCategory[$oCategory->category_id] = $this->objectToArray($oCategory);
     	}
-    	//echo '<pre>';print_r($aAds);echo '</pre>';die;
-    	return $aAds;
+    	
+    	while ($oSubCategory->fetch())
+    	{
+    		$aCategory[$oSubCategory->parent_id]['SubMenu'][] = $this->objectToArray($oSubCategory);
+    		$aCategory['AllCats']['title'] = SGL_String::translate('All Categories');
+    		$aCategory['AllCats']['SubMenu'][] = $this->objectToArray($oSubCategory);
+    	}
+    	
+    	//Move "All Cats" Array from last index to first Index
+    	end($aCategory);
+    	$last_key = key($aCategory);
+    	$aCategory = $this->move_to_top($aCategory, $last_key);
+    	
+    	switch ($aParams['position'])
+    	{
+    		case 0:
+    			$this->template = $this->leftMenuTemplate;
+    			break;
+    		case 1:
+    			$this->template = $this->footerMenuTemplate;
+    			break;
+    	}
+    	
+    	$output->subCatsCount = $subCatsCount = count($aCategory['AllCats']['SubMenu']);
+    	$cols = $subCatsCount / 10;
+    	if ($cols <= 1)
+    		$output->cols = 'one';
+    	elseif (1 < $cols && $cols <= 2)
+    		$output->cols = 'double';
+    	elseif (2 < $cols && $cols <= 3)
+    		$output->cols = 'triple';
+    	elseif (3 < $cols && $cols <= 4)
+    		$output->cols = 'quad';
+		else
+    		$output->cols = 'six';
+		
+    	//echo '<pre>';print_r($cols);echo '</pre>';die;
+    	return $aCategory;
     }
     
 	function process($output)
@@ -97,12 +132,32 @@ class Ads_Block_Ads extends SGL_Manager
  		// use moduleName for template path setting
  		$output->moduleName     = $this->templatePath;
  		$output->masterTemplate = $this->template;
- 		$output->results = $asliders;
  		$output->conf=$conf;
- 		 
+ 		
  		$view = new SGL_HtmlSimpleView($output);
  		return $view->render();
     }
     
+	function move_to_top($array, $key) {
+	    $temp = array($key => $array[$key]);
+	    unset($array[$key]);
+	    $array = $temp + $array;
+	    return $array;
+	}
+    
+    function objectToArray( $data )
+    {
+    	if (is_array($data) || is_object($data))
+    		//if (count($data))
+    	{
+    		$result = array();
+    		foreach ($data as $key => $value)
+    		{
+    			$result[$key] = $this->objectToArray($value);
+    		}
+    		return $result;
+    	}
+    	return $data;
+    }
 }
 ?>
