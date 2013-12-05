@@ -43,7 +43,7 @@ require_once SGL_MOD_DIR . '/user/classes/UserDAO.php';
 include_once SGL_MOD_DIR  . '/company/classes/CompanyImage.php';
 
 /**
- * Type your class description here ...
+ * Manage Companies
  *
  * @package company
  * @author  Siavash Habil Amirkhiz <amirkhiz@gmail.com>
@@ -93,6 +93,7 @@ class CompanyMgr extends SGL_Manager
         $input->branch      = (object)$req->get('branch');
         $input->aBranchImg	= $req->get('fBranchImage');
         $input->search		= (object)$req->get('search');
+        $input->categoryId		= $req->get('frmCategoryID');
         
         //  if errors have occured
         if (isset($aErrors) && count($aErrors)) {
@@ -125,31 +126,37 @@ class CompanyMgr extends SGL_Manager
         	$aCity[$city->city_id] = $city->title;
         }
         $output->aCity = $aCity;
+        
+        $village = DB_DataObject::factory($this->conf['table']['village']);
+        $village->whereAdd('region_id = 236');
+        $village->whereAdd('status = 1');
+        $village->find();
+        $aVillage = array();
+        while ($village->fetch())
+        {
+        	$aVillage[$village->village_id] = $village->title;
+        }
+        $output->aVillage = $aVillage;
+        
         if ($output->action == 'edit' || $output->action == 'update')
         {
 	        $query = "
 			        SELECT
 				        c.city_id AS cId, c.Title AS cTitle,
-				        r.region_id AS rId, r.Title AS rTitle,
-				        v.village_id AS vId, v.Title AS vTitle
+				        r.region_id AS rId, r.Title AS rTitle
 			        FROM {$this->conf['table']['city']} AS c
 			        RIGHT JOIN {$this->conf['table']['region']} AS r
 			        	ON r.city_id = c.city_id
-			        RIGHT JOIN {$this->conf['table']['village']} AS v
-			        	ON v.region_id = r.region_id
 			        WHERE c.city_id = {$output->company->city_id}
 		        ";
 	        
 	        $lists = $this->dbh->getAll($query);
 	        $aRegion = array();
-	        $aVillage = array();
 	        foreach ($lists as $key => $value)
 	        {
 		        $aRegion[$value->rId] = $value->rTitle;
-		        $aVillage[$value->vId] = $value->vTitle;
 	        }
 	        $output->aRegion = $aRegion;
-        	$output->aVillage = $aVillage;
         }
         //echo '<pre>';print_r($usrInfo);echo '</pre>';die;
 
@@ -382,10 +389,10 @@ class CompanyMgr extends SGL_Manager
     	
     	if (!empty($oCompany))
     	{
-	    	$oCompany->telephone_1 = substr_replace(substr_replace($oCompany->telephone_1, ' ', 6, 0), ' ', 3, 0) ;
-	    	$oCompany->telephone_2 = substr_replace(substr_replace($oCompany->telephone_2, ' ', 6, 0), ' ', 3, 0) ;
-	    	$oCompany->fax = substr_replace(substr_replace($oCompany->fax, ' ', 6, 0), ' ', 3, 0) ;
-	    	$oCompany->mobile = substr_replace(substr_replace($oCompany->mobile, ' ', 6, 0), ' ', 3, 0) ;
+	    	$oCompany->telephone_1 = substr_replace(substr_replace(substr_replace($oCompany->telephone_1, ' ', 8, 0), ' ', 6, 0), ' ', 3, 0) ;
+	    	$oCompany->telephone_2 = substr_replace(substr_replace(substr_replace($oCompany->telephone_2, ' ', 8, 0), ' ', 6, 0), ' ', 3, 0) ;
+	    	$oCompany->fax = substr_replace(substr_replace(substr_replace($oCompany->fax, ' ', 8, 0), ' ', 6, 0), ' ', 3, 0) ;
+	    	$oCompany->mobile = substr_replace(substr_replace(substr_replace($oCompany->mobile, ' ', 8, 0), ' ', 6, 0), ' ', 3, 0) ;
 	    	$oCompany->keywords = explode(',', $oCompany->keywords);
 	    	$output->company = $oCompany;
 	    	
@@ -428,6 +435,11 @@ class CompanyMgr extends SGL_Manager
     		$whereCon = ' AND cmp.city_id = ' . $input->search->city_id;
     	}
     	
+    	//echo '<pre>';print_r($input->categoryId);echo '</pre>';die;
+    	if (isset($input->categoryId)){
+    		$whereCon = ' AND cmp.category_id = ' . $input->categoryId;
+    	}
+    	
     	$query = "
     			SELECT 
     				cmp.*, 
@@ -457,12 +469,18 @@ class CompanyMgr extends SGL_Manager
     	if (PEAR::isError($aPagedData)) {
     		return false;
     	}
+    	
+    	foreach ($aPagedData['data'] as $key => $value)
+    	{
+    		$aPagedData['data'][$key]['history'] = substr($value['history'], 0, 100) . ' ...';
+    	}
+    	
     	$output->aPagedData = $aPagedData;
     	$output->totalItems = $aPagedData['totalItems'];
     
     	if (is_array($aPagedData['data']) && count($aPagedData['data'])) {
     		$output->pager = ($aPagedData['totalItems'] <= $limit) ? false : true;
-    	}
+    	}else SGL_HTTP::redirect(array('moduleName' => 'default', 'managerName' => 'default'));
     }
 }
 ?>

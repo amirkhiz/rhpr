@@ -95,18 +95,18 @@ $(document).ready(function() {
 	$("#form-group").validationEngine();
 	$(".chosen").chosen();
 	
-	$('#company_mobile').mask('999 999 9999',{placeholder:"9"});
-	$('#company_telephone-1').mask('999 999 9999',{placeholder:"9"});
-	$('#company_telephone-2').mask('999 999 9999',{placeholder:" "});
-	$('#company_fax').mask('999 999 9999',{placeholder:" "});
+	$('#company_mobile').mask('999 999 99 99',{placeholder:"9"});
+	$('#company_telephone-1').mask('999 999 99 99',{placeholder:"9"});
+	$('#company_telephone-2').mask('999 999 99 99',{placeholder:" "});
+	$('#company_fax').mask('999 999 99 99',{placeholder:" "});
 	
 	$.mask.definitions['~']='[+-a]';
 	$('#company_blood').mask('a~',{placeholder:" "});
 	
-	$('.mobile').mask('999 999 9999',{placeholder:"9"});
-	$('.tel').mask('999 999 9999',{placeholder:"9"});
-	$('.tel2').mask('999 999 9999',{placeholder:" "});
-	$('.fax').mask('999 999 9999',{placeholder:" "});
+	$('.mobile').mask('999 999 99 99',{placeholder:"9"});
+	$('.tel').mask('999 999 99 99',{placeholder:"9"});
+	$('.tel2').mask('999 999 99 99',{placeholder:" "});
+	$('.fax').mask('999 999 99 99',{placeholder:" "});
 	
 	// initialise plugin
 	$('#categoryMenu').superfish({

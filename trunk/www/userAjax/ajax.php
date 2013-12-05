@@ -30,10 +30,10 @@
 		$data = '';
 		while ($row = mysqli_fetch_object($result))
 		{
-			$row->telephone_1 = substr_replace(substr_replace($row->telephone_1, ' ', 6, 0), ' ', 3, 0) ;
-			$row->telephone_2 = substr_replace(substr_replace($row->telephone_2, ' ', 6, 0), ' ', 3, 0) ;
-			$row->fax = substr_replace(substr_replace($row->fax, ' ', 6, 0), ' ', 3, 0) ;
-			$row->mobile = substr_replace(substr_replace($row->mobile, ' ', 6, 0), ' ', 3, 0) ;
+			$row->telephone_1 = substr_replace(substr_replace(substr_replace($row->telephone_1, ' ', 8, 0), ' ', 6, 0), ' ', 3, 0) ;
+			$row->telephone_2 = substr_replace(substr_replace(substr_replace($row->telephone_2, ' ', 8, 0), ' ', 6, 0), ' ', 3, 0) ;
+			$row->fax = substr_replace(substr_replace(substr_replace($row->fax, ' ', 8, 0), ' ', 6, 0), ' ', 3, 0) ;
+			$row->mobile = substr_replace(substr_replace(substr_replace($row->mobile, ' ', 8, 0), ' ', 6, 0), ' ', 3, 0) ;
 			$data .= '
 				<h5>' . $row->name . '</h5>
 				<dl style="overflow:hidden;">
