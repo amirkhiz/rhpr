@@ -1,12 +1,15 @@
 {msgGet()}
 <div class="redBtn">{translate(pageTitle)}</div>
+{if:aPagedData[data]}
 <div class="gradientBack searchRes">
     <div class="searchResRow" flexy:foreach="aPagedData[data],key,aValue">
-    	{if:aValue[logo]}
     	<div class="searchResLogo">
+    		{if:aValue[logo]}
     		<img src="{webRoot}/images/company/small/small_{aValue[logo]}" />
+			{else:}
+    		<img src="{webRoot}/themes/{theme}/images/bg/noImage.png" />
+			{end:}
     	</div>
-		{end:}
 		<div class="searchResDetail">
 			<div class="searchResName">
 				<span class="searchResTitle">{translate(#Name#)} : </span>
@@ -33,7 +36,15 @@
 				{aValue[history]}
 			</div>
 		</div>
+		<div class="searchResAction">
+			<a class="searchResActionMore redBtn" href="{makeUrl(#viewProfile#,#company#,#company#,aPagedData[data],#frmCompanyID|company_id#,key)}">{translate(#More#)} ...</a>
+		</div>
 		<div class="clearfix"><!-- Clear & Fix --></div>
     </div>
 	<div colspan="5">{if:pager}<flexy:include src="admin_pager_table.html" />{end:}</div>
 </div>
+{else:}
+<div class="searchNoRes">
+	<span class="searchNoRes">{translate(#There is not any Company in this Category.#)}</span>
+</div>
+{end:}

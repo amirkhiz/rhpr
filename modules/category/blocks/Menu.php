@@ -88,10 +88,12 @@ class Category_Block_Menu extends SGL_Manager
     	
     	while ($oSubCategory->fetch())
     	{
-    		$aCategory[$oSubCategory->parent_id]['SubMenu'][] = $this->objectToArray($oSubCategory);
+    		$aCategory[$oSubCategory->parent_id]['SubMenu'][$oSubCategory->category_id] = $this->objectToArray($oSubCategory);
     		$aCategory['AllCats']['title'] = SGL_String::translate('All Categories');
-    		$aCategory['AllCats']['SubMenu'][] = $this->objectToArray($oSubCategory);
+    		$aCategory['AllCats']['SubMenu'][$oSubCategory->category_id] = $this->objectToArray($oSubCategory);
     	}
+    	
+    	//echo '<pre>';print_r($aCategory);echo '</pre>';die;
     	
     	//Move "All Cats" Array from last index to first Index
     	end($aCategory);
